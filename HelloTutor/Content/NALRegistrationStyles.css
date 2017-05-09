@@ -1,0 +1,137 @@
+﻿@charset "UTF-8";
+/* CSS Document */
+
+
+body {
+    background-color:#0087c4;
+    padding-top:70px;
+}
+
+
+#form1 {
+	margin:0 auto;
+	margin:22px;
+    height:1200px;
+	padding-bottom:50px;
+	font-family:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	display:block;
+	width:750px;
+	margin:0 auto;
+	padding:22px;
+}
+
+#formBackground {
+	background-color:white;
+	width:100%;
+	box-shadow:0px 0px 50px #2F2F2F;
+	display:block;
+	margin:0 auto;
+    padding-bottom:30px;
+    background-color:white;
+    box-shadow:0px 0px 50px #2F2F2F;
+}
+
+#formheader img{
+	width:90%;
+    padding-left:50px;
+    padding-top:40px;
+}
+
+#formtitle h1{
+	text-align:center;
+	font-size:30px;
+	color:#0087C4;
+    font-weight:bold;
+    padding-bottom:12px;
+}
+
+.dataField{
+    background-color:#ededed;
+    width:100%;
+    height:50px;
+    font-size:16px;
+    border:none;
+    color:black;
+    padding:12px;
+}
+
+#form1 table tr {
+    margin-bottom:30px;
+    padding-bottom:30px;
+}
+
+
+table td{
+    font-weight:bold;
+    font-color:#0087c4;
+    border:none;
+    
+}
+
+#form1 table{
+    width:600px;
+}
+
+#btnSubmit{
+    background-color:#0087c4;
+    color:white;
+    height:60px;
+    width:222px;
+    font-size:16px;
+    align-self:center;
+    display: block;
+    margin: auto;
+    border-radius:12px;
+}
+
+.spacer {
+    color: white;
+    display:block;
+    height:50px;
+}
+
+input {
+    border:none;
+}
+
+#nameSpacer{
+    width:22px;
+}
+
+#ddlRoles {
+    height:50px;
+}
+
+#ddlTraining {
+    height:50px;
+}
+
+td span {
+
+    color: #ea2d2d;
+
+    padding-left: 12px;
+
+}
+
+#Button1{
+
+    background-color:#0087c4;
+
+    color:white;
+
+    height:60px;
+
+    width:222px;
+
+    font-size:16px;
+
+    align-self:center;
+
+    display: block;
+
+    margin: auto;
+
+    border-radius:12px;
+
+}

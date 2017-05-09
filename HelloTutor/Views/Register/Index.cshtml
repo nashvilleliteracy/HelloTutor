@@ -1,0 +1,190 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>
+
+    </title>
+    <link rel="stylesheet" href="/Content/NALRegistrationStyles.css" />
+    <link rel="stylesheet" href="/Content/Register/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link href="https://kendo.cdn.telerik.com/2016.2.714/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2016.2.714/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2016.2.714/styles/kendo.dataviz.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2016.2.714/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2016.2.714/styles/kendo.dataviz.default.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://kendo.cdn.telerik.com/2016.2.714/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2016.2.714/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2016.2.714/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2016.2.714/js/kendo.aspnetmvc.min.js"></script>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+
+
+
+</head>
+<body>
+    <form method="post" action="/Register/Index" onsubmit="javascript: return validateForm();" id="form1">
+        
+        <div id="formBackground">
+
+            <div id="formheader">
+                <img src="/Content/NALClogo_large.png" id="nalcLogo" alt="Nashville Adult Literacy Council" />
+            </div>
+
+            <div id="formtitle">
+                <h1>Sign Up in Seconds</h1>
+            </div>
+
+            <table align="center" style="align-self:center;vertical-align:central;max-width:600px">
+                <tr>
+                    <td colspan="2">
+                        <span id="lblWarning"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input name="FirstName" type="text" id="FirstName" class="dataField" placeholder="First Name" />
+                    <span id="firstNameValidator" style="visibility:hidden;">Please enter your First Name</span></td>
+                    <td id="nameSpacer"><h2></h2></td>
+                    <td>
+                        <input name="LastName" type="text" id="LastName" class="dataField" placeholder="Last Name" />
+                        <span id="lastNameValidator" style="visibility:hidden;">Please enter your Last Name</span>
+                    </td>
+                </tr>
+                <tr CssClass="spacer">
+                    <td><h2></h2></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input name="EmailAddress" type="text" id="EmailAddress" class="dataField" placeholder="Email" />
+                        <span id="emailAddressValidator" style="visibility:hidden;">Please specify your Email</span>
+                    </td>
+                </tr>
+
+                <tr CssClass="spacer">
+                    <td><h2></h2></td>
+                </tr>
+
+                <tr>
+                    <td colspan="3">
+                        <input name="PhoneNumber" type="text" id="PhoneNumber" class="dataField" placeholder="Phone" />
+
+                        <span id="phoneNumberValidator" style="visibility:hidden;">Please specify your Phone Number</span>
+
+                    </td>
+                </tr>
+
+                <tr CssClass="spacer">
+                    <td><h2></h2></td>
+                </tr>
+
+                <tr>
+                    <td colspan="3">
+                        @(Html.Kendo().DropDownList()
+                      .Name("RoleID")
+                      .DataTextField("Name")
+                      .DataValueField("Id")
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("_GetRoles", "Roles");
+                          });
+                      })
+                      .HtmlAttributes(new { style = "width: 100%" })
+                        )
+
+
+                        <span id="RequiredFieldValidator3" style="visibility:hidden;">Please select a Role</span>
+
+                    </td>
+                </tr>
+
+                <tr CssClass="spacer">
+                    <td><h2></h2></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <select name="TrainingSessionID" id="TrainingSessionID" class="dataField">
+                            <option value="-1">&lt;Please select a Training Session&gt;</option>
+                            <option value="2">Start Now Training in Antioch( Start Date : Feb 26 2017 12:00AM )</option>
+                            <option value="3">One on One Training in West End( Start Date : Oct 22 2016 12:00AM )</option>
+                            <option value="4">Start Now Training in West End( Start Date : Oct 30 2016 12:00AM )</option>
+
+                        </select>
+
+                        <span id="RequiredFieldValidator2" style="visibility:hidden;">Please select a Training Session</span>
+
+
+                    </td>
+                </tr>
+
+
+                <tr CssClass="spacer">
+                    <td><h2></h2></td>
+                </tr>
+
+                <tr>
+                    <td colspan="3">
+                        <textarea name="Comments" rows="2" cols="20" id="Comments" class="dataField" placeholder="Let us know if you have any questions or comments" style="height:200px;"></textarea>
+                    </td>
+                </tr>
+
+
+
+                <tr CssClass="spacer">
+                    <td><h2></h2></td>
+                </tr>
+
+                <tr>
+                    <td style="align-self:center" colspan="3">
+                        <input type="button" name="Button1" onclick="return validateForm();" value="Submit My Registration" id="Button1" />
+                        <span id="validationErrorsLabel" style="width:100%;visibility:hidden;position:relative;top:1em;text-align:center;">Please submit all required information above</span>
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+
+            </form>
+
+    <script>
+        function validateForm() {
+            var valid = true;
+
+            if ($('#FirstName').val() == '') {
+                $('#firstNameValidator').css("visibility", "visible");
+                valid = false;
+            }
+            if ($('#LastName').val() == '') {
+                $('#lastNameValidator').css("visibility", "visible");
+                valid = false;
+            }
+            if ($('#EmailAddress').val() == '') {
+                $('#emailAddressValidator').css("visibility", "visible");
+                valid = false;
+            }
+            if ($('#PhoneNumber').val() == '') {
+                $('#phoneNumberValidator').css("visibility", "visible");
+                valid = false;
+            }
+
+            if (valid == false)
+            {
+                $('#validationErrorsLabel').css("visibility", "visible");
+                return false;
+            }
+            
+            document.forms[0].submit();
+            
+        }
+    </script>
+</body>
+</html>
+
+
