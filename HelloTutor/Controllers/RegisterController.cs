@@ -12,6 +12,11 @@ namespace HelloTutor.Controllers
         // GET: Register
         public ActionResult Index()
         {
+            RoleViewModel rvm = new RoleViewModel();
+
+            IEnumerable<SelectListItem> rolesdata = rvm.GetRolesForListBox();
+            ViewBag.Roles = rolesdata;
+
             return View();
         }
 

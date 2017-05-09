@@ -85,24 +85,19 @@
 
                 <tr>
                     <td colspan="3">
-                        @(Html.Kendo().DropDownList()
-                      .Name("RoleID")
-                      .DataTextField("Name")
-                      .DataValueField("Id")
-                      .DataSource(source =>
-                      {
-                          source.Read(read =>
-                          {
-                              read.Action("_GetRoles", "Roles");
-                          });
-                      })
-                      .HtmlAttributes(new { style = "width: 100%" })
-                        )
+                        <select name="RoleID" id="RoleID" class="dataField" onchange="populateClasses();">
+                            <option value="-1">&lt;Please select a Role&gt;</option>
 
+                            @foreach (var item in (SelectList)ViewBag.Roles)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                            
+                        </select>
 
-                        <span id="RequiredFieldValidator3" style="visibility:hidden;">Please select a Role</span>
+                            <span id="RequiredFieldValidator3" style="visibility:hidden;">Please select a Role</span>
 
-                    </td>
+</td>
                 </tr>
 
                 <tr CssClass="spacer">
@@ -154,6 +149,26 @@
             </form>
 
     <script>
+
+        function populateClasses() {
+            $("#TrainingSessionID").empty();
+            $("#TrainingSessionID").append("<option value='0'>Please select a Training Session</option>");
+            var roleId = $('#RoleID').val();
+            var Url="@Url.Content("/Classes/_getClassesByRoleId")";
+            $.ajax({
+                url:Url,
+                dataType: 'json',
+                data: { RoleID: roleId },
+                success: function (data) {                
+                    $("#TrainingSessionID").empty();
+                    $("#TrainingSessionID").append("<option value='0'>Please select a Training Session</option>");
+                    $.each(data, function (index, optiondata) {                  
+                        $("#TrainingSessionID").append("<option value='" + optiondata.ClassID + "'>" + optiondata.ClassName + "</option>");
+                    });
+                }
+            });
+        }     
+
         function validateForm() {
             var valid = true;
 
