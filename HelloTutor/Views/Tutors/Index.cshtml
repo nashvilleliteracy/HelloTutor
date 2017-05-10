@@ -1,0 +1,18 @@
+﻿@(Html.Kendo().Grid<HelloTutor.Models.TutorViewModel>()
+          .Name("grid")
+          .DataSource(dataSource => dataSource //Configure the Grid data source.
+              .Ajax() //Specify that Ajax binding is used.
+              .Read(read => read.Action("Tutors_Read", "Home")) //Set the action method which will return the data in JSON format.
+           )
+          .Columns(columns =>
+          {
+            //Create a column bound to the ProductID property.
+            columns.Bound(Tutor => Tutor.FirstName);
+            //Create a column bound to the ProductName property.
+            columns.Bound(Tutor => Tutor.LastName);
+            //Create a column bound to the UnitsInStock property.
+            columns.Bound(Tutor => Tutor.EmailAddress);
+          })
+          .Pageable() // Enable paging
+          .Sortable() // Enable sorting
+)

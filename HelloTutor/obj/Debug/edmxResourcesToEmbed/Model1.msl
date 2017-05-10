@@ -93,5 +93,14 @@
         <ScalarProperty Name="Id" ColumnName="UserId" />
       </EndProperty>
     </AssociationSetMapping>
+    <EntitySetMapping Name="TutorsRoles">
+      <EntityTypeMapping TypeName="HelloTutorModel.TutorsRole">
+        <MappingFragment StoreEntitySet="TutorsRoles">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="TutorId" ColumnName="TutorId" />
+          <ScalarProperty Name="GUID" ColumnName="GUID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

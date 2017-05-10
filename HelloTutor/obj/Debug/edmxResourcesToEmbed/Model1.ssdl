@@ -53,7 +53,7 @@
     <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
     <Property Name="StartDate" Type="datetime" Nullable="false" />
-    <Property Name="EndDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="EndDate" Type="datetime" Nullable="false" />
     <Property Name="Role" Type="int" Nullable="false" />
     <Property Name="MaxEnrollment" Type="int" Nullable="false" />
   </EntityType>
@@ -86,6 +86,15 @@
     <Property Name="GUID" Type="uniqueidentifier" Nullable="false" />
     <Property Name="TutorId" Type="int" Nullable="false" />
     <Property Name="ClassId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TutorsRoles">
+    <Key>
+      <PropertyRef Name="TutorId" />
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="GUID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="TutorId" Type="int" Nullable="false" />
+    <Property Name="RoleId" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_Classes_TutorRoles">
     <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
@@ -179,6 +188,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_TutorsRoles_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+    <End Role="TutorsRoles" Type="Self.TutorsRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TutorsRoles">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TutorsRoles_Tutors">
+    <End Role="Tutors" Type="Self.Tutors" Multiplicity="1" />
+    <End Role="TutorsRoles" Type="Self.TutorsRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tutors">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TutorsRoles">
+        <PropertyRef Name="TutorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="HelloTutorModelStoreContainer">
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
@@ -189,6 +222,7 @@
     <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tutors" EntityType="Self.Tutors" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TutorsClasses" EntityType="Self.TutorsClasses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TutorsRoles" EntityType="Self.TutorsRoles" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Classes_TutorRoles" Association="Self.FK_Classes_TutorRoles">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="Classes" EntitySet="Classes" />
@@ -216,6 +250,14 @@
     <AssociationSet Name="FK_TutorsClasses_Tutors" Association="Self.FK_TutorsClasses_Tutors">
       <End Role="Tutors" EntitySet="Tutors" />
       <End Role="TutorsClasses" EntitySet="TutorsClasses" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TutorsRoles_Roles" Association="Self.FK_TutorsRoles_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="TutorsRoles" EntitySet="TutorsRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TutorsRoles_Tutors" Association="Self.FK_TutorsRoles_Tutors">
+      <End Role="Tutors" EntitySet="Tutors" />
+      <End Role="TutorsRoles" EntitySet="TutorsRoles" />
     </AssociationSet>
   </EntityContainer>
 </Schema>
