@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated || true)
+{
+  @Html.AntiForgeryToken()
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li>@Html.ActionLink("Tutors", "Index", "Tutors")</li>
+      <li>@Html.ActionLink("Classes", "Index", "Classes")</li>
+      <li>@Html.ActionLink("Roles", "Index", "Roles")</li>
+    </ul>
+  </li>
+
+}
