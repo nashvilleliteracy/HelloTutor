@@ -1,0 +1,21 @@
+﻿@(Html.Kendo().Grid<HelloTutor.Class>()
+          .Name("grid")
+          .DataSource(dataSource => dataSource //Configure the Grid data source.
+              .Ajax() //Specify that Ajax binding is used.
+              .Read(read => read.Action("","")) //Set the action method which will return the data in JSON format.
+           )
+          .Columns(columns =>
+          {
+            columns.Bound(Class => Class.Name);
+            columns.Bound(Class => Class.Description);
+            columns.Bound(Class => Class.Role);
+            columns.Bound(Class => Class.StartDate);
+            columns.Bound(Class => Class.EndDate);
+            columns.Bound(Class => Class.MaxEnrollment);
+          })
+          .Pageable() // Enable paging
+          .Sortable() // Enable sorting
+          .Scrollable()
+          .Filterable()
+
+)

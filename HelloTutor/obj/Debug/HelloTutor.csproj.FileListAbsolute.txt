@@ -175,6 +175,6 @@ C:\Users\mto7829\github\HelloTutor\HelloTutor\bin\sv-SE\Kendo.Mvc.resources.dll
 C:\Users\mto7829\github\HelloTutor\HelloTutor\bin\tr-TR\Kendo.Mvc.resources.dll
 C:\Users\mto7829\github\HelloTutor\HelloTutor\bin\uk-UA\Kendo.Mvc.resources.dll
 C:\Users\mto7829\github\HelloTutor\HelloTutor\bin\zh-CN\Kendo.Mvc.resources.dll
-C:\Users\mto7829\github\HelloTutor\HelloTutor\obj\Debug\HelloTutor.csprojResolveAssemblyReference.cache
 C:\Users\mto7829\github\HelloTutor\HelloTutor\obj\Debug\HelloTutor.dll
 C:\Users\mto7829\github\HelloTutor\HelloTutor\obj\Debug\HelloTutor.pdb
+C:\Users\mto7829\github\HelloTutor\HelloTutor\obj\Debug\HelloTutor.csprojResolveAssemblyReference.cache

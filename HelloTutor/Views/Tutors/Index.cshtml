@@ -1,18 +1,29 @@
-﻿@(Html.Kendo().Grid<HelloTutor.Models.TutorViewModel>()
+﻿@(Html.Kendo().Grid<HelloTutor.Tutor>()
           .Name("grid")
-          .DataSource(dataSource => dataSource //Configure the Grid data source.
-              .Ajax() //Specify that Ajax binding is used.
-              .Read(read => read.Action("Tutors_Read", "Home")) //Set the action method which will return the data in JSON format.
-           )
           .Columns(columns =>
           {
-            //Create a column bound to the ProductID property.
-            columns.Bound(Tutor => Tutor.FirstName);
-            //Create a column bound to the ProductName property.
-            columns.Bound(Tutor => Tutor.LastName);
-            //Create a column bound to the UnitsInStock property.
-            columns.Bound(Tutor => Tutor.EmailAddress);
+            columns.Bound(T => T.FirstName);
+            columns.Bound(T => T.LastName);
+            columns.Bound(T => T.Email);
+            columns.Bound(T => T.PhoneNumber);
+            columns.Bound(T => T.Comments);
+            columns.Bound(T => T.Id).Groupable(false).Visible(false);
+            columns.Bound(T => T.GUID).Groupable(false).Visible(false);
+            columns.Command(command => { command.Edit(); command.Destroy(); });
           })
+          .ToolBar(toolbar => toolbar.Create())
+          .Editable(editable => editable.Mode(GridEditMode.InLine))
           .Pageable() // Enable paging
           .Sortable() // Enable sorting
+          .Scrollable()
+          .Filterable()
+          .HtmlAttributes(new { style = "height:550px;" })
+          .DataSource(dataSource => dataSource //Configure the Grid data source.
+              .Ajax() //Specify that Ajax binding is used.
+              .Model(model => model.Id(T => T.Id))
+              .Create(update => update.Action("EditingInline_Create","Tutors"))
+              .Read(read => read.Action("Tutors_Read", "Tutors")) //Set the action method which will return the data in JSON format.
+              .Update(update => update.Action("EditingInline_Update", "Tutors"))
+              .Destroy(update => update.Action("EditingInline_Destroy", "Tutors"))
+           )
 )

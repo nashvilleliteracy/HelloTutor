@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using HelloTutor.Models;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace HelloTutor.Controllers
 {
@@ -23,5 +25,15 @@ namespace HelloTutor.Controllers
 
             return Json(classdata, JsonRequestBehavior.AllowGet);
         }
+
+    public ActionResult Classes_Read([DataSourceRequest]DataSourceRequest request)
+    {
+      var HiTutor = new HelloTutorEntities();
+      IQueryable<Class> clss = HiTutor.Classes;
+      DataSourceResult result = clss.ToDataSourceResult(request);
+      return Json(result);
+
     }
+
+  }
 }

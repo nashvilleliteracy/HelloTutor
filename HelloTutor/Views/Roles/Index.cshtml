@@ -1,0 +1,17 @@
+﻿@(Html.Kendo().Grid<HelloTutor.Role>()
+          .Name("grid")
+          .DataSource(dataSource => dataSource //Configure the Grid data source.
+              .Ajax() //Specify that Ajax binding is used.
+              .Read(read => read.Action("Roles_Read", "Roles")) //Set the action method which will return the data in JSON format.
+           )
+          .Columns(columns =>
+          {
+            columns.Bound(R => R.Name);
+            columns.Bound(R => R.Description_);
+          })
+          .Pageable() // Enable paging
+          .Sortable() // Enable sorting
+          .Scrollable()
+          .Filterable()
+          
+)
