@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HelloTutorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HelloTutorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -58,7 +58,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
           <Property Name="StartDate" Type="datetime" Nullable="false" />
-          <Property Name="EndDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
           <Property Name="Role" Type="int" Nullable="false" />
           <Property Name="MaxEnrollment" Type="int" Nullable="false" />
         </EntityType>
@@ -91,6 +91,15 @@
           <Property Name="GUID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="TutorId" Type="int" Nullable="false" />
           <Property Name="ClassId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TutorsRoles">
+          <Key>
+            <PropertyRef Name="TutorId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="GUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TutorId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Classes_TutorRoles">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
@@ -184,6 +193,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TutorsRoles_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="TutorsRoles" Type="Self.TutorsRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TutorsRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TutorsRoles_Tutors">
+          <End Role="Tutors" Type="Self.Tutors" Multiplicity="1" />
+          <End Role="TutorsRoles" Type="Self.TutorsRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tutors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TutorsRoles">
+              <PropertyRef Name="TutorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="HelloTutorModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
@@ -194,6 +227,7 @@
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tutors" EntityType="Self.Tutors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TutorsClasses" EntityType="Self.TutorsClasses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TutorsRoles" EntityType="Self.TutorsRoles" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Classes_TutorRoles" Association="Self.FK_Classes_TutorRoles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Classes" EntitySet="Classes" />
@@ -222,9 +256,16 @@
             <End Role="Tutors" EntitySet="Tutors" />
             <End Role="TutorsClasses" EntitySet="TutorsClasses" />
           </AssociationSet>
+          <AssociationSet Name="FK_TutorsRoles_Roles" Association="Self.FK_TutorsRoles_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="TutorsRoles" EntitySet="TutorsRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TutorsRoles_Tutors" Association="Self.FK_TutorsRoles_Tutors">
+            <End Role="Tutors" EntitySet="Tutors" />
+            <End Role="TutorsRoles" EntitySet="TutorsRoles" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HelloTutorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -279,7 +320,7 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Role" Type="Int32" Nullable="false" />
           <Property Name="MaxEnrollment" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Role1" Relationship="Self.FK_Classes_TutorRoles" FromRole="Classes" ToRole="Roles" />
@@ -294,6 +335,7 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Description_" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Classes" Relationship="Self.FK_Classes_TutorRoles" FromRole="Roles" ToRole="Classes" />
+          <NavigationProperty Name="TutorsRoles" Relationship="HelloTutorModel.FK_TutorsRoles_Roles" FromRole="Role" ToRole="TutorsRole" />
         </EntityType>
         <EntityType Name="Tutor">
           <Key>
@@ -307,6 +349,7 @@
           <Property Name="PhoneNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="TutorsClasses" Relationship="Self.FK_TutorsClasses_Tutors" FromRole="Tutors" ToRole="TutorsClasses" />
+          <NavigationProperty Name="TutorsRoles" Relationship="HelloTutorModel.FK_TutorsRoles_Tutors" FromRole="Tutor" ToRole="TutorsRole" />
         </EntityType>
         <EntityType Name="TutorsClass">
           <Key>
@@ -420,7 +463,51 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="TutorsRoles" EntityType="HelloTutorModel.TutorsRole" />
+          <AssociationSet Name="FK_TutorsRoles_Roles" Association="HelloTutorModel.FK_TutorsRoles_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="TutorsRole" EntitySet="TutorsRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TutorsRoles_Tutors" Association="HelloTutorModel.FK_TutorsRoles_Tutors">
+            <End Role="Tutor" EntitySet="Tutors" />
+            <End Role="TutorsRole" EntitySet="TutorsRoles" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="TutorsRole">
+          <Key>
+            <PropertyRef Name="TutorId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="GUID" Type="Guid" Nullable="false" />
+          <Property Name="TutorId" Type="Int32" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="HelloTutorModel.FK_TutorsRoles_Roles" FromRole="TutorsRole" ToRole="Role" />
+          <NavigationProperty Name="Tutor" Relationship="HelloTutorModel.FK_TutorsRoles_Tutors" FromRole="TutorsRole" ToRole="Tutor" />
+        </EntityType>
+        <Association Name="FK_TutorsRoles_Roles">
+          <End Type="HelloTutorModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="HelloTutorModel.TutorsRole" Role="TutorsRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TutorsRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TutorsRoles_Tutors">
+          <End Type="HelloTutorModel.Tutor" Role="Tutor" Multiplicity="1" />
+          <End Type="HelloTutorModel.TutorsRole" Role="TutorsRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tutor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TutorsRole">
+              <PropertyRef Name="TutorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -519,6 +606,15 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="TutorsRoles">
+            <EntityTypeMapping TypeName="HelloTutorModel.TutorsRole">
+              <MappingFragment StoreEntitySet="TutorsRoles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="TutorId" ColumnName="TutorId" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

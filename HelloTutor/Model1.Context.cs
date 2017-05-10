@@ -33,5 +33,6 @@ namespace HelloTutor
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Tutor> Tutors { get; set; }
         public virtual DbSet<TutorsClass> TutorsClasses { get; set; }
+        public virtual DbSet<TutorsRole> TutorsRoles { get; set; }
     }
 }

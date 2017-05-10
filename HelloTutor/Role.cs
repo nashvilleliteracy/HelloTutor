@@ -18,6 +18,7 @@ namespace HelloTutor
         public Role()
         {
             this.Classes = new HashSet<Class>();
+            this.TutorsRoles = new HashSet<TutorsRole>();
         }
     
         public int Id { get; set; }
@@ -27,5 +28,7 @@ namespace HelloTutor
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Classes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TutorsRole> TutorsRoles { get; set; }
     }
 }
