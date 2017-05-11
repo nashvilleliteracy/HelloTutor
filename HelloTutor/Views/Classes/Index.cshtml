@@ -1,21 +1,57 @@
-﻿@(Html.Kendo().Grid<HelloTutor.Class>()
+﻿@{
+ViewBag.Title = "Classes";
+}
+<h1>@ViewBag.Title</h1>
+@(Html.Kendo().Grid<HelloTutor.Class>()
           .Name("grid")
-          .DataSource(dataSource => dataSource //Configure the Grid data source.
-              .Ajax() //Specify that Ajax binding is used.
-              .Read(read => read.Action("","")) //Set the action method which will return the data in JSON format.
-           )
           .Columns(columns =>
           {
+            columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
             columns.Bound(Class => Class.Name);
             columns.Bound(Class => Class.Description);
             columns.Bound(Class => Class.Role);
             columns.Bound(Class => Class.StartDate);
             columns.Bound(Class => Class.EndDate);
             columns.Bound(Class => Class.MaxEnrollment);
+            columns.Bound(Class => Class.Id).Groupable(false).Visible(false);
+            columns.Bound(Class => Class.GUID).Groupable(false).Visible(false);
           })
-          .Pageable() // Enable paging
-          .Sortable() // Enable sorting
+           .HtmlAttributes(new { style = "height:400px;" })
+          .ToolBar(toolbar => toolbar
+            .Create()
+            .Text("Add Class"))
+          .Editable(editable => editable.Mode(GridEditMode.InLine))
+          .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5)) // Enable paging
           .Scrollable()
+          .Groupable()
+          .Sortable() // Enable sorting
           .Filterable()
-
+          .DataSource(dataSource => dataSource //Configure the Grid data source.
+              .Ajax() //Specify that Ajax binding is used.
+              .Model(model => model.Id(Class => Class.Id))
+              .Create(update => update.Action("EditingInline_Create", "Classes"))
+              .Read(read => read.Action("Classes_Read", "Classes")) //Set the action method which will return the data in JSON format.
+              .Update(update => update.Action("EditingInline_Update", "Classes"))
+              .Destroy(update => update.Action("EditingInline_Destroy", "Classes"))
+              .PageSize(20)
+              .Events(events => events.Error("error_handler"))
+           )
 )
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

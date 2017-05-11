@@ -22,6 +22,7 @@
         <EntityTypeShape EntityType="HelloTutorModel.TutorsRole" Width="1.5" PointX="5.25" PointY="10.75" />
         <AssociationConnector Association="HelloTutorModel.FK_TutorsRoles_Roles" />
         <AssociationConnector Association="HelloTutorModel.FK_TutorsRoles_Tutors" />
+        <EntityTypeShape EntityType="HelloTutorModel.database_firewall_rules" Width="1.5" PointX="7.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

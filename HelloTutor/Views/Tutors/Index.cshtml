@@ -1,7 +1,12 @@
-﻿@(Html.Kendo().Grid<HelloTutor.Tutor>()
+﻿@{
+ViewBag.Title = "Tutors";
+}
+<h1>@ViewBag.Title</h1>
+@(Html.Kendo().Grid<HelloTutor.Tutor>()
           .Name("grid")
           .Columns(columns =>
           {
+            columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
             columns.Bound(T => T.FirstName);
             columns.Bound(T => T.LastName);
             columns.Bound(T => T.Email);
@@ -9,21 +14,43 @@
             columns.Bound(T => T.Comments);
             columns.Bound(T => T.Id).Groupable(false).Visible(false);
             columns.Bound(T => T.GUID).Groupable(false).Visible(false);
-            columns.Command(command => { command.Edit(); command.Destroy(); });
           })
-          .ToolBar(toolbar => toolbar.Create())
+          .HtmlAttributes(new { style = "height:400px;" })
+          .ToolBar(toolbar => toolbar
+            .Create()
+            .Text("Add Tutor"))
           .Editable(editable => editable.Mode(GridEditMode.InLine))
-          .Pageable() // Enable paging
-          .Sortable() // Enable sorting
+          .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5)) // Enable paging
           .Scrollable()
+          .Groupable()
+          .Sortable() // Enable sorting
           .Filterable()
-          .HtmlAttributes(new { style = "height:550px;" })
           .DataSource(dataSource => dataSource //Configure the Grid data source.
               .Ajax() //Specify that Ajax binding is used.
               .Model(model => model.Id(T => T.Id))
-              .Create(update => update.Action("EditingInline_Create","Tutors"))
+              .Create(update => update.Action("EditingInline_Create", "Tutors"))
               .Read(read => read.Action("Tutors_Read", "Tutors")) //Set the action method which will return the data in JSON format.
               .Update(update => update.Action("EditingInline_Update", "Tutors"))
               .Destroy(update => update.Action("EditingInline_Destroy", "Tutors"))
+              .PageSize(20)
+              .Events(events => events.Error("error_handler"))
            )
 )
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

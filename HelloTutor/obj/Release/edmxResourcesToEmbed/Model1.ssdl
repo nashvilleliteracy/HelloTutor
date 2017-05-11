@@ -96,24 +96,6 @@
     <Property Name="TutorId" Type="int" Nullable="false" />
     <Property Name="RoleId" Type="int" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'HelloTutor.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="database_firewall_rules">
-    <Key>
-      <PropertyRef Name="id" />
-      <PropertyRef Name="name" />
-      <PropertyRef Name="start_ip_address" />
-      <PropertyRef Name="end_ip_address" />
-      <PropertyRef Name="create_date" />
-      <PropertyRef Name="modify_date" />
-    </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="start_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
-    <Property Name="end_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
-    <Property Name="create_date" Type="datetime" Nullable="false" />
-    <Property Name="modify_date" Type="datetime" Nullable="false" />
-  </EntityType>
   <Association Name="FK_Classes_TutorRoles">
     <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
     <End Role="Classes" Type="Self.Classes" Multiplicity="*" />
@@ -241,16 +223,6 @@ warning 6002: The table/view 'HelloTutor.sys.database_firewall_rules' does not h
     <EntitySet Name="Tutors" EntityType="Self.Tutors" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TutorsClasses" EntityType="Self.TutorsClasses" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TutorsRoles" EntityType="Self.TutorsRoles" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" store:Type="Views" store:Schema="sys">
-      <DefiningQuery>SELECT 
-    [database_firewall_rules].[id] AS [id], 
-    [database_firewall_rules].[name] AS [name], 
-    [database_firewall_rules].[start_ip_address] AS [start_ip_address], 
-    [database_firewall_rules].[end_ip_address] AS [end_ip_address], 
-    [database_firewall_rules].[create_date] AS [create_date], 
-    [database_firewall_rules].[modify_date] AS [modify_date]
-    FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
-    </EntitySet>
     <AssociationSet Name="FK_Classes_TutorRoles" Association="Self.FK_Classes_TutorRoles">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="Classes" EntitySet="Classes" />

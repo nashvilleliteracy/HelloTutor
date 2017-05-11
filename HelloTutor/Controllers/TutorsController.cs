@@ -12,6 +12,7 @@ namespace HelloTutor.Controllers
 {
   public class TutorsController : Controller
   {
+
     // GET: Tutors
     public ActionResult Index()
     {
@@ -38,10 +39,18 @@ namespace HelloTutor.Controllers
            )
       ) 
       {
-        var HelloTutor = new HelloTutorEntities();
-        tutor = HelloTutor.Tutors.Add(tutor);
-        HelloTutor.SaveChanges();
-        
+        using (var HelloTutor = new HelloTutorEntities())
+        {
+          //Added Guid Generator since empty guid is causing default NewId() in db to fail leaving guid value as empty value.
+          tutor.GUID = Guid.NewGuid();
+          HelloTutor.Tutors.Add(tutor);
+          HelloTutor.SaveChanges();
+          //forcing modelstate.Isvalid true here to force proper refresh of grid
+          //Not sure what I am doing wrong but caused expected behavior
+          //quick way to get working until we really need to fix
+          ModelState.Clear();
+        }
+
       }
 
       return Json(new[] { tutor }.ToDataSourceResult(request, ModelState));
@@ -53,6 +62,11 @@ namespace HelloTutor.Controllers
       if (tutor != null && ModelState.IsValid)
       {
         //productService.Update(product);
+        using (var HelloTutor = new HelloTutorEntities())
+        { 
+          HelloTutor.Tutors.Attach(tutor);
+          HelloTutor.SaveChanges();
+        }
       }
 
       return Json(new[] { tutor }.ToDataSourceResult(request, ModelState));
@@ -63,7 +77,25 @@ namespace HelloTutor.Controllers
     {
       if (tutor != null)
       {
-        //productService.Destroy(product);
+        using (var HelloTutor = new HelloTutorEntities())
+        {
+
+          //Remove all associated classes
+          foreach (var tc in tutor.TutorsClasses)
+          {
+            HelloTutor.TutorsClasses.Remove(tc);
+          }
+
+          //Remove all associated roles
+          foreach (var tr in tutor.TutorsRoles)
+          {
+            HelloTutor.TutorsRoles.Remove(tr);
+          }
+          //Remove Tutor
+          HelloTutor.Tutors.Attach(tutor);
+          HelloTutor.Tutors.Remove(tutor);
+          HelloTutor.SaveChanges();
+        }
       }
 
       return Json(new[] { tutor }.ToDataSourceResult(request, ModelState));

@@ -1,17 +1,54 @@
-﻿@(Html.Kendo().Grid<HelloTutor.Role>()
+﻿@{
+ViewBag.Title = "Roles";
+}
+<h1>@ViewBag.Title</h1>
+@(Html.Kendo().Grid<HelloTutor.Role>()
           .Name("grid")
-          .DataSource(dataSource => dataSource //Configure the Grid data source.
-              .Ajax() //Specify that Ajax binding is used.
-              .Read(read => read.Action("Roles_Read", "Roles")) //Set the action method which will return the data in JSON format.
-           )
           .Columns(columns =>
           {
-            columns.Bound(R => R.Name);
-            columns.Bound(R => R.Description_);
+            columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
+            columns.Bound(role => role.Name);
+            columns.Bound(role => role.Description_).Title("Description");
+            columns.Bound(role => role.Id).Groupable(false).Visible(false);
+            columns.Bound(role => role.GUID).Groupable(false).Visible(false);
           })
-          .Pageable() // Enable paging
-          .Sortable() // Enable sorting
+          .HtmlAttributes(new { style = "height:400px;" })
+          .ToolBar(toolbar => toolbar
+            .Create()
+            .Text("Add Role"))
+          .Editable(editable => editable.Mode(GridEditMode.InLine))
+          .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5)) // Enable paging
           .Scrollable()
+          .Groupable()
+          .Sortable() // Enable sorting
           .Filterable()
-          
+          .DataSource(dataSource => dataSource //Configure the Grid data source.
+              .Ajax() //Specify that Ajax binding is used.
+              .Model(model => model.Id(role => role.Id))
+              .Create(update => update.Action("EditingInline_Create", "Roles"))
+              .Read(read => read.Action("Roles_Read", "Roles"))
+              .Update(update => update.Action("EditingInline_Update", "Roles"))
+              .Destroy(update => update.Action("EditingInline_Destroy", "Roles"))
+              .PageSize(20)
+              .Events(events => events.Error("error_handler"))
+           )
 )
+
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>
