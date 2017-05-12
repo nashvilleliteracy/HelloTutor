@@ -24,7 +24,7 @@ namespace HelloTutor
         public int Id { get; set; }
         public System.Guid GUID { get; set; }
         public string Name { get; set; }
-        public string Description_ { get; set; }
+        public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Classes { get; set; }

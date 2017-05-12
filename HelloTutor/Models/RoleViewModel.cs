@@ -10,6 +10,7 @@ namespace HelloTutor.Models
     {
         public Int32 RoleID { get; set; }
         public String RoleName { get; set; }
+        public String RoleDescription { get; set; }
 
         public Guid RoleGuid { get; set; }
 
@@ -21,7 +22,7 @@ namespace HelloTutor.Models
                                 {
                                     Value = x.Id.ToString(),
                                     Text = x.Name
-                                }).OrderBy(r=>r.Text);
+                                }).OrderBy(r => r.Text);
 
             return new SelectList(roles, "Value", "Text");
         }

@@ -64,9 +64,9 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="GUID" Type="Guid" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="Description_" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Classes" Relationship="Self.FK_Classes_TutorRoles" FromRole="Roles" ToRole="Classes" />
     <NavigationProperty Name="TutorsRoles" Relationship="HelloTutorModel.FK_TutorsRoles_Roles" FromRole="Role" ToRole="TutorsRole" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Tutor">
     <Key>

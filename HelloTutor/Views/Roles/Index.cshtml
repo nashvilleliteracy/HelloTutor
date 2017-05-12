@@ -2,15 +2,15 @@
 ViewBag.Title = "Roles";
 }
 <h1>@ViewBag.Title</h1>
-@(Html.Kendo().Grid<HelloTutor.Role>()
-          .Name("grid")
+@(Html.Kendo().Grid<HelloTutor.Models.RoleViewModel>()
+          .Name("gridRoles")
           .Columns(columns =>
           {
             columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
-            columns.Bound(role => role.Name);
-            columns.Bound(role => role.Description_).Title("Description");
-            columns.Bound(role => role.Id).Groupable(false).Visible(false);
-            columns.Bound(role => role.GUID).Groupable(false).Visible(false);
+            columns.Bound(role => role.RoleName);
+            columns.Bound(role => role.RoleDescription).Title("Description");
+            columns.Bound(role => role.RoleID).Groupable(false).Visible(false);
+            columns.Bound(role => role.RoleGuid).Groupable(false).Visible(false);
           })
           .HtmlAttributes(new { style = "height:400px;" })
           .ToolBar(toolbar => toolbar
@@ -27,7 +27,7 @@ ViewBag.Title = "Roles";
           .Filterable()
           .DataSource(dataSource => dataSource //Configure the Grid data source.
               .Ajax() //Specify that Ajax binding is used.
-              .Model(model => model.Id(role => role.Id))
+              .Model(model => model.Id(role => role.RoleID))
               .Create(update => update.Action("EditingInline_Create", "Roles"))
               .Read(read => read.Action("Roles_Read", "Roles"))
               .Update(update => update.Action("EditingInline_Update", "Roles"))

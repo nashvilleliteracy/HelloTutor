@@ -3,7 +3,7 @@ ViewBag.Title = "Classes";
 }
 <h1>@ViewBag.Title</h1>
 @(Html.Kendo().Grid<HelloTutor.Class>()
-          .Name("grid")
+          .Name("gridClasses")
           .Columns(columns =>
           {
             columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
