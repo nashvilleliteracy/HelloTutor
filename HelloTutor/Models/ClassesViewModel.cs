@@ -15,6 +15,7 @@ namespace HelloTutor.Models
         public Int32 RoleID { get; set; }
         public Int32 MaxEnrollment { get; set; }
         public Guid ClassGuid { get; set; }
+        public String ClassDescription { get; set; }
 
         //public IEnumerable<SelectListItem> GetClassesForListBox(Int32 roleId)
         //{
@@ -24,7 +25,7 @@ namespace HelloTutor.Models
         //        Value = c.Id.ToString(),
         //        Text = c.Name
         //    });
-                         
+
         //    return new SelectList(classes, "Value", "Text");
         //}
 

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using HelloTutor.Models;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using HelloTutor.Models;
-using Kendo.Mvc.UI;
-using Kendo.Mvc.Extensions;
+using System.Data.Entity;
 
 namespace HelloTutor.Controllers
 {
@@ -14,6 +15,9 @@ namespace HelloTutor.Controllers
         // GET: Roles
         public ActionResult Index()
         {
+            var rvm = new RoleViewModel();
+            ViewData["roles"] = rvm.GetRolesForListBox();
+
             return View();
         }
 
@@ -26,84 +30,131 @@ namespace HelloTutor.Controllers
             return Json(classdata, JsonRequestBehavior.AllowGet);
         }
 
-    public ActionResult Classes_Read([DataSourceRequest]DataSourceRequest request)
-    {
-      var HiTutor = new HelloTutorEntities();
-      IQueryable<Class> clss = HiTutor.Classes;
-      DataSourceResult result = clss.ToDataSourceResult(request);
-      return Json(result);
-
-    }
-
-    [AcceptVerbs(HttpVerbs.Post)]
-    public ActionResult EditingInline_Create([DataSourceRequest] DataSourceRequest request, Class class_)
-    {
-
-      if (class_ != null &&
-          !(string.IsNullOrWhiteSpace(class_.Name) &&
-            string.IsNullOrWhiteSpace(class_.Description) &&
-            string.IsNullOrWhiteSpace(class_.MaxEnrollment.ToString()) &&
-            string.IsNullOrWhiteSpace(class_.Role.ToString()) &&
-            class_.EndDate == null 
-
-           )
-      )
-      {
-        using (var HelloTutor = new HelloTutorEntities())
+        public ActionResult Classes_Read([DataSourceRequest]DataSourceRequest request)
         {
-          //Added Guid Generator since empty guid is causing default NewId() in db to fail leaving guid value as empty value.
-          class_.GUID = Guid.NewGuid();
-          HelloTutor.Classes.Add(class_);
-          HelloTutor.SaveChanges();
-          //forcing modelstate.Isvalid true here to force proper refresh of grid
-          //Not sure what I am doing wrong but caused expected behavior
-          //quick way to get working until we really need to fix
-          ModelState.Clear();
+            var HiTutor = new HelloTutorEntities();
+            IQueryable<HelloTutor.Class> classes = HiTutor.Classes;
+            DataSourceResult result = classes.ToDataSourceResult(request, class_ => new ClassesViewModel
+            {
+                ClassName = class_.Name,
+                ClassDescription = class_.Description,
+                MaxEnrollment = class_.MaxEnrollment,
+                StartDate = class_.StartDate,
+                EndDate = class_.EndDate,
+                ClassGuid = class_.GUID,
+                RoleID = class_.Role,
+                ClassID = class_.Id
+            });
+
+            //DataSourceResult result = clss.ToDataSourceResult(request);
+            return Json(result);
+
         }
 
-      }
-
-      return Json(new[] { class_ }.ToDataSourceResult(request, ModelState));
-    }
-
-    [AcceptVerbs(HttpVerbs.Post)]
-    public ActionResult EditingInline_Update([DataSourceRequest] DataSourceRequest request, Class class_)
-    {
-      if (class_ != null && ModelState.IsValid)
-      {
-        //productService.Update(product);
-        using (var HelloTutor = new HelloTutorEntities())
-        {
-          HelloTutor.Classes.Attach(class_);
-          HelloTutor.SaveChanges();
-        }
-      }
-
-      return Json(new[] { class_ }.ToDataSourceResult(request, ModelState));
-    }
-
-    [AcceptVerbs(HttpVerbs.Post)]
-    public ActionResult EditingInline_Destroy([DataSourceRequest] DataSourceRequest request, Class class_)
-    {
-      if (class_ != null)
-      {
-        using (var HelloTutor = new HelloTutorEntities())
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingInline_Create([DataSourceRequest] DataSourceRequest request, ClassesViewModel cvm)
         {
 
-          //Remove all associated roles
-          foreach (var tc in class_.TutorsClasses)
-          {
-            HelloTutor.TutorsClasses.Remove(tc);
-          }
-          //Remove Tutor
-          HelloTutor.Classes.Attach(class_);
-          HelloTutor.Classes.Remove(class_);
-          HelloTutor.SaveChanges();
+            if (cvm != null &&
+                !(string.IsNullOrWhiteSpace(cvm.ClassName) &&
+                  string.IsNullOrWhiteSpace(cvm.ClassDescription) &&
+                  string.IsNullOrWhiteSpace(cvm.MaxEnrollment.ToString()) &&
+                  string.IsNullOrWhiteSpace(cvm.RoleID.ToString()) &&
+                  cvm.EndDate == null &&
+                  cvm.StartDate == null
+                 )
+            )
+            {
+                using (var HelloTutor = new HelloTutorEntities())
+                {
+                    var class_ = new Class()
+                    {
+                        Name = cvm.ClassName,
+                        Description = cvm.ClassDescription,
+                        Role = cvm.RoleID,
+                        MaxEnrollment = cvm.MaxEnrollment,
+                        StartDate = cvm.StartDate,
+                        EndDate = cvm.EndDate,
+                        GUID = Guid.NewGuid()
+                    };
+
+                    HelloTutor.Classes.Add(class_);
+                    HelloTutor.SaveChanges();
+                    //forcing modelstate.Isvalid true here to force proper refresh of grid
+                    //Not sure what I am doing wrong but caused expected behavior
+                    //quick way to get working until we really need to fix
+                    cvm.ClassGuid = class_.GUID;
+                    cvm.ClassID = class_.Id;
+                    ModelState.Clear();
+                }
+
+            }
+
+            return Json(new[] { cvm }.ToDataSourceResult(request, ModelState));
         }
-      }
 
-      return Json(new[] { class_ }.ToDataSourceResult(request, ModelState));
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingInline_Update([DataSourceRequest] DataSourceRequest request, ClassesViewModel cvm)
+        {
+            if (cvm != null && ModelState.IsValid)
+            {
+                var class_ = new Class()
+                {
+                    Name = cvm.ClassName,
+                    Description = cvm.ClassDescription,
+                    Role = cvm.RoleID,
+                    MaxEnrollment = cvm.MaxEnrollment,
+                    StartDate = cvm.StartDate,
+                    EndDate = cvm.EndDate,
+                    GUID = cvm.ClassGuid,
+                    Id = cvm.ClassID
+                };
+                //productService.Update(product);
+                using (var HelloTutor = new HelloTutorEntities())
+                {
+                    HelloTutor.Classes.Attach(class_);
+                    HelloTutor.Entry(class_).State = EntityState.Modified;
+                    HelloTutor.SaveChanges();
+                }
+            }
+
+            return Json(new[] { cvm }.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingInline_Destroy([DataSourceRequest] DataSourceRequest request, ClassesViewModel cvm)
+        {
+            if (cvm != null)
+            {
+                using (var HelloTutor = new HelloTutorEntities())
+                {
+
+                    var class_ = new Class()
+                    {
+                        Name = cvm.ClassName,
+                        Description = cvm.ClassDescription,
+                        Role = cvm.RoleID,
+                        MaxEnrollment = cvm.MaxEnrollment,
+                        StartDate = cvm.StartDate,
+                        EndDate = cvm.EndDate,
+                        GUID = cvm.ClassGuid,
+                        Id = cvm.ClassID
+                    };
+
+                    //Remove all associated roles
+                    foreach (var tc in class_.TutorsClasses)
+                    {
+                        HelloTutor.TutorsClasses.Remove(tc);
+                    }
+                    //Remove Tutor
+                    HelloTutor.Classes.Attach(class_);
+                    HelloTutor.Classes.Remove(class_);
+                    HelloTutor.SaveChanges();
+                }
+            }
+
+            return Json(new[] { cvm }.ToDataSourceResult(request, ModelState));
+        }
+
     }
-
-  }
 }

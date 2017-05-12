@@ -3,6 +3,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -31,6 +32,11 @@ namespace HelloTutor.Controllers
                 RoleDescription = role.Description
             });
             return Json(result);
+        }
+
+        public ActionResult _RolesDropDown ()
+        {
+            return View();
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -83,6 +89,7 @@ namespace HelloTutor.Controllers
                 using (var HelloTutor = new HelloTutorEntities())
                 {
                     HelloTutor.Roles.Attach(role);
+                    HelloTutor.Entry(role).State = EntityState.Modified;
                     HelloTutor.SaveChanges();
                 }
             }

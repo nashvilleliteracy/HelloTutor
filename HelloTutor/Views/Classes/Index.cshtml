@@ -2,19 +2,19 @@
 ViewBag.Title = "Classes";
 }
 <h1>@ViewBag.Title</h1>
-@(Html.Kendo().Grid<HelloTutor.Class>()
+@(Html.Kendo().Grid<HelloTutor.Models.ClassesViewModel>()
           .Name("gridClasses")
           .Columns(columns =>
           {
-            columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
-            columns.Bound(Class => Class.Name);
-            columns.Bound(Class => Class.Description);
-            columns.Bound(Class => Class.Role);
-            columns.Bound(Class => Class.StartDate);
-            columns.Bound(Class => Class.EndDate);
-            columns.Bound(Class => Class.MaxEnrollment);
-            columns.Bound(Class => Class.Id).Groupable(false).Visible(false);
-            columns.Bound(Class => Class.GUID).Groupable(false).Visible(false);
+              columns.Command(command => { command.Edit(); command.Destroy(); }).Title("Commands").Width(180);
+              columns.Bound(Class => Class.ClassName);
+              columns.Bound(Class => Class.ClassDescription);
+              columns.ForeignKey(Class => Class.RoleID, (System.Collections.IEnumerable)ViewData["Roles"], "Value", "Text").Title("Role");
+              columns.Bound(Class => Class.StartDate).ClientTemplate("#= kendo.toString(StartDate, \"MM/dd/yyyy hh:mm tt\") #"); ;
+              columns.Bound(Class => Class.EndDate).ClientTemplate("#= kendo.toString(StartDate, \"MM/dd/yyyy hh:mm tt\") #"); ;
+              columns.Bound(Class => Class.MaxEnrollment);
+              columns.Bound(Class => Class.ClassID).Groupable(false).Visible(false);
+              columns.Bound(Class => Class.ClassGuid).Groupable(false).Visible(false);
           })
            .HtmlAttributes(new { style = "height:400px;" })
           .ToolBar(toolbar => toolbar
@@ -31,7 +31,7 @@ ViewBag.Title = "Classes";
           .Filterable()
           .DataSource(dataSource => dataSource //Configure the Grid data source.
               .Ajax() //Specify that Ajax binding is used.
-              .Model(model => model.Id(Class => Class.Id))
+              .Model(model => model.Id(Class => Class.ClassID))
               .Create(update => update.Action("EditingInline_Create", "Classes"))
               .Read(read => read.Action("Classes_Read", "Classes")) //Set the action method which will return the data in JSON format.
               .Update(update => update.Action("EditingInline_Update", "Classes"))
@@ -43,15 +43,20 @@ ViewBag.Title = "Classes";
 <script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {
-            var message = "Errors:\n";
+            var message = "There are some errors:\n";
+            // Create a message containing all errors.
             $.each(e.errors, function (key, value) {
                 if ('errors' in value) {
-                    $.each(value.errors, function() {
+                    $.each(value.errors, function () {
                         message += this + "\n";
                     });
                 }
             });
+            // Display the message.
             alert(message);
+            // Cancel the changes.
+            var grid = $("#gridClasses").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>
