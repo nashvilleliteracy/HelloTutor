@@ -10,6 +10,7 @@ namespace HelloTutor.Controllers
     {
         public ActionResult Index()
         {
+            
       //return View();
       return Redirect("Account/Login");
         }

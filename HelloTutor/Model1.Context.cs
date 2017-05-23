@@ -34,6 +34,5 @@ namespace HelloTutor
         public virtual DbSet<Tutor> Tutors { get; set; }
         public virtual DbSet<TutorsClass> TutorsClasses { get; set; }
         public virtual DbSet<TutorsRole> TutorsRoles { get; set; }
-        public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
     }
 }

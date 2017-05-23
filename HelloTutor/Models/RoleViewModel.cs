@@ -16,6 +16,7 @@ namespace HelloTutor.Models
 
         public IEnumerable<SelectListItem> GetRolesForListBox()
         {
+           
             HelloTutorEntities db = new HelloTutorEntities();
             var roles = db.Roles.Select(x =>
                                 new SelectListItem

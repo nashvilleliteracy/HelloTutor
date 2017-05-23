@@ -6,7 +6,6 @@ ViewBag.Title = "Tutors";
           .Name("gridTutors")
           .Columns(columns =>
           {
-            columns.Command(command => { command.Edit(); command.Destroy(); }).Title("Commands").Width(180);
             columns.Bound(T => T.FirstName);
             columns.Bound(T => T.LastName);
             columns.Bound(T => T.Email);
@@ -14,6 +13,7 @@ ViewBag.Title = "Tutors";
             columns.Bound(T => T.Comments);
             columns.Bound(T => T.Id).Groupable(false).Visible(false);
             columns.Bound(T => T.GUID).Groupable(false).Visible(false);
+            columns.Command(command => { command.Edit(); command.Destroy(); }).Title("Commands").Width(180);
           })
           .HtmlAttributes(new { style = "height:400px;" })
           .ToolBar(toolbar => toolbar

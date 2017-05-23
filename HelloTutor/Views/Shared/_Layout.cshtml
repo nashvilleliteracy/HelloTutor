@@ -33,9 +33,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("About", "About", "Home")</li>*@
+                    <li>@Html.ActionLink("Tutors", "Index", "Tutors")</li>
                     @Html.Partial("_AdminPartial")
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -46,7 +46,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Hello Tutor ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Hello Tutor</p>
         </footer>
     </div>
 

@@ -1,12 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="HelloTutorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="HelloTutorEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AspNetRoles" EntityType="HelloTutorModel.AspNetRole" />
+    <EntitySet Name="AspNetUserClaims" EntityType="HelloTutorModel.AspNetUserClaim" />
+    <EntitySet Name="AspNetUserLogins" EntityType="HelloTutorModel.AspNetUserLogin" />
+    <EntitySet Name="AspNetUsers" EntityType="HelloTutorModel.AspNetUser" />
+    <EntitySet Name="Classes" EntityType="HelloTutorModel.Class" />
+    <EntitySet Name="Roles" EntityType="HelloTutorModel.Role" />
+    <EntitySet Name="Tutors" EntityType="HelloTutorModel.Tutor" />
+    <EntitySet Name="TutorsClasses" EntityType="HelloTutorModel.TutorsClass" />
+    <EntitySet Name="TutorsRoles" EntityType="HelloTutorModel.TutorsRole" />
+    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id" Association="HelloTutorModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="HelloTutorModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Classes_TutorRoles" Association="HelloTutorModel.FK_Classes_TutorRoles">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="Class" EntitySet="Classes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TutorsClasses_Classes" Association="HelloTutorModel.FK_TutorsClasses_Classes">
+      <End Role="Class" EntitySet="Classes" />
+      <End Role="TutorsClass" EntitySet="TutorsClasses" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TutorsRoles_Roles" Association="HelloTutorModel.FK_TutorsRoles_Roles">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="TutorsRole" EntitySet="TutorsRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TutorsClasses_Tutors" Association="HelloTutorModel.FK_TutorsClasses_Tutors">
+      <End Role="Tutor" EntitySet="Tutors" />
+      <End Role="TutorsClass" EntitySet="TutorsClasses" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TutorsRoles_Tutors" Association="HelloTutorModel.FK_TutorsRoles_Tutors">
+      <End Role="Tutor" EntitySet="Tutors" />
+      <End Role="TutorsRole" EntitySet="TutorsRoles" />
+    </AssociationSet>
+    <AssociationSet Name="AspNetUserRoles" Association="HelloTutorModel.AspNetUserRoles">
+      <End Role="AspNetRole" EntitySet="AspNetRoles" />
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+    </AssociationSet>
+  </EntityContainer>
   <EntityType Name="AspNetRole">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUsers" Relationship="HelloTutorModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
   </EntityType>
   <EntityType Name="AspNetUserClaim">
     <Key>
@@ -15,8 +58,8 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="User_Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+    <Property Name="User_Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="HelloTutorModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
   </EntityType>
   <EntityType Name="AspNetUserLogin">
     <Key>
@@ -24,23 +67,23 @@
       <PropertyRef Name="LoginProvider" />
       <PropertyRef Name="ProviderKey" />
     </Key>
-    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="HelloTutorModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
   </EntityType>
   <EntityType Name="AspNetUser">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
-    <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
-    <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+    <Property Name="Discriminator" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUserClaims" Relationship="HelloTutorModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+    <NavigationProperty Name="AspNetUserLogins" Relationship="HelloTutorModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+    <NavigationProperty Name="AspNetRoles" Relationship="HelloTutorModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
   </EntityType>
   <EntityType Name="Class">
     <Key>
@@ -48,14 +91,14 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="GUID" Type="Guid" Nullable="false" />
-    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Role" Type="Int32" Nullable="false" />
     <Property Name="MaxEnrollment" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="Role1" Relationship="Self.FK_Classes_TutorRoles" FromRole="Classes" ToRole="Roles" />
-    <NavigationProperty Name="TutorsClasses" Relationship="Self.FK_TutorsClasses_Classes" FromRole="Classes" ToRole="TutorsClasses" />
+    <NavigationProperty Name="Role1" Relationship="HelloTutorModel.FK_Classes_TutorRoles" FromRole="Class" ToRole="Role" />
+    <NavigationProperty Name="TutorsClasses" Relationship="HelloTutorModel.FK_TutorsClasses_Classes" FromRole="Class" ToRole="TutorsClass" />
   </EntityType>
   <EntityType Name="Role">
     <Key>
@@ -64,9 +107,9 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="GUID" Type="Guid" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Classes" Relationship="Self.FK_Classes_TutorRoles" FromRole="Roles" ToRole="Classes" />
-    <NavigationProperty Name="TutorsRoles" Relationship="HelloTutorModel.FK_TutorsRoles_Roles" FromRole="Role" ToRole="TutorsRole" />
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Classes" Relationship="HelloTutorModel.FK_Classes_TutorRoles" FromRole="Role" ToRole="Class" />
+    <NavigationProperty Name="TutorsRoles" Relationship="HelloTutorModel.FK_TutorsRoles_Roles" FromRole="Role" ToRole="TutorsRole" />
   </EntityType>
   <EntityType Name="Tutor">
     <Key>
@@ -74,12 +117,12 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="GUID" Type="Guid" Nullable="false" />
-    <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="PhoneNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
     <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="TutorsClasses" Relationship="Self.FK_TutorsClasses_Tutors" FromRole="Tutors" ToRole="TutorsClasses" />
+    <NavigationProperty Name="TutorsClasses" Relationship="HelloTutorModel.FK_TutorsClasses_Tutors" FromRole="Tutor" ToRole="TutorsClass" />
     <NavigationProperty Name="TutorsRoles" Relationship="HelloTutorModel.FK_TutorsRoles_Tutors" FromRole="Tutor" ToRole="TutorsRole" />
   </EntityType>
   <EntityType Name="TutorsClass">
@@ -90,121 +133,9 @@
     <Property Name="GUID" Type="Guid" Nullable="false" />
     <Property Name="TutorId" Type="Int32" Nullable="false" />
     <Property Name="ClassId" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="Class" Relationship="Self.FK_TutorsClasses_Classes" FromRole="TutorsClasses" ToRole="Classes" />
-    <NavigationProperty Name="Tutor" Relationship="Self.FK_TutorsClasses_Tutors" FromRole="TutorsClasses" ToRole="Tutors" />
+    <NavigationProperty Name="Class" Relationship="HelloTutorModel.FK_TutorsClasses_Classes" FromRole="TutorsClass" ToRole="Class" />
+    <NavigationProperty Name="Tutor" Relationship="HelloTutorModel.FK_TutorsClasses_Tutors" FromRole="TutorsClass" ToRole="Tutor" />
   </EntityType>
-  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id">
-    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AspNetUserClaims">
-        <PropertyRef Name="User_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AspNetUserLogins">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Classes_TutorRoles">
-    <End Role="Roles" Type="Self.Role" Multiplicity="1" />
-    <End Role="Classes" Type="Self.Class" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Roles">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Classes">
-        <PropertyRef Name="Role" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TutorsClasses_Classes">
-    <End Role="Classes" Type="Self.Class" Multiplicity="1" />
-    <End Role="TutorsClasses" Type="Self.TutorsClass" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Classes">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="TutorsClasses">
-        <PropertyRef Name="ClassId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TutorsClasses_Tutors">
-    <End Role="Tutors" Type="Self.Tutor" Multiplicity="1" />
-    <End Role="TutorsClasses" Type="Self.TutorsClass" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Tutors">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="TutorsClasses">
-        <PropertyRef Name="TutorId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="AspNetUserRoles">
-    <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
-    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
-  </Association>
-  <EntityContainer Name="HelloTutorEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
-    <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
-    <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
-    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
-    <EntitySet Name="Classes" EntityType="Self.Class" />
-    <EntitySet Name="Roles" EntityType="Self.Role" />
-    <EntitySet Name="Tutors" EntityType="Self.Tutor" />
-    <EntitySet Name="TutorsClasses" EntityType="Self.TutorsClass" />
-    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
-    </AssociationSet>
-    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Classes_TutorRoles" Association="Self.FK_Classes_TutorRoles">
-      <End Role="Roles" EntitySet="Roles" />
-      <End Role="Classes" EntitySet="Classes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TutorsClasses_Classes" Association="Self.FK_TutorsClasses_Classes">
-      <End Role="Classes" EntitySet="Classes" />
-      <End Role="TutorsClasses" EntitySet="TutorsClasses" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TutorsClasses_Tutors" Association="Self.FK_TutorsClasses_Tutors">
-      <End Role="Tutors" EntitySet="Tutors" />
-      <End Role="TutorsClasses" EntitySet="TutorsClasses" />
-    </AssociationSet>
-    <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
-      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-    </AssociationSet>
-    <EntitySet Name="TutorsRoles" EntityType="HelloTutorModel.TutorsRole" />
-    <AssociationSet Name="FK_TutorsRoles_Roles" Association="HelloTutorModel.FK_TutorsRoles_Roles">
-      <End Role="Role" EntitySet="Roles" />
-      <End Role="TutorsRole" EntitySet="TutorsRoles" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TutorsRoles_Tutors" Association="HelloTutorModel.FK_TutorsRoles_Tutors">
-      <End Role="Tutor" EntitySet="Tutors" />
-      <End Role="TutorsRole" EntitySet="TutorsRoles" />
-    </AssociationSet>
-    <EntitySet Name="database_firewall_rules" EntityType="HelloTutorModel.database_firewall_rules" />
-  </EntityContainer>
   <EntityType Name="TutorsRole">
     <Key>
       <PropertyRef Name="TutorId" />
@@ -216,6 +147,58 @@
     <NavigationProperty Name="Role" Relationship="HelloTutorModel.FK_TutorsRoles_Roles" FromRole="TutorsRole" ToRole="Role" />
     <NavigationProperty Name="Tutor" Relationship="HelloTutorModel.FK_TutorsRoles_Tutors" FromRole="TutorsRole" ToRole="Tutor" />
   </EntityType>
+  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id">
+    <End Type="HelloTutorModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="HelloTutorModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserClaim">
+        <PropertyRef Name="User_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+    <End Type="HelloTutorModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="HelloTutorModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserLogin">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Classes_TutorRoles">
+    <End Type="HelloTutorModel.Role" Role="Role" Multiplicity="1" />
+    <End Type="HelloTutorModel.Class" Role="Class" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Class">
+        <PropertyRef Name="Role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TutorsClasses_Classes">
+    <End Type="HelloTutorModel.Class" Role="Class" Multiplicity="1" />
+    <End Type="HelloTutorModel.TutorsClass" Role="TutorsClass" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Class">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TutorsClass">
+        <PropertyRef Name="ClassId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_TutorsRoles_Roles">
     <End Type="HelloTutorModel.Role" Role="Role" Multiplicity="1" />
     <End Type="HelloTutorModel.TutorsRole" Role="TutorsRole" Multiplicity="*" />
@@ -225,6 +208,18 @@
       </Principal>
       <Dependent Role="TutorsRole">
         <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TutorsClasses_Tutors">
+    <End Type="HelloTutorModel.Tutor" Role="Tutor" Multiplicity="1" />
+    <End Type="HelloTutorModel.TutorsClass" Role="TutorsClass" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tutor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TutorsClass">
+        <PropertyRef Name="TutorId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -240,20 +235,8 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="database_firewall_rules">
-    <Key>
-      <PropertyRef Name="id" />
-      <PropertyRef Name="name" />
-      <PropertyRef Name="start_ip_address" />
-      <PropertyRef Name="end_ip_address" />
-      <PropertyRef Name="create_date" />
-      <PropertyRef Name="modify_date" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="start_ip_address" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-    <Property Name="end_ip_address" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-    <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
-  </EntityType>
+  <Association Name="AspNetUserRoles">
+    <End Type="HelloTutorModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+    <End Type="HelloTutorModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+  </Association>
 </Schema>
