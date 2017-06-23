@@ -10,23 +10,8 @@ namespace HelloTutor.Controllers
     {
         public ActionResult Index()
         {
-            
-      //return View();
-      return Redirect("Account/Login");
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return Redirect("Register/Index");
+            //return Redirect("Account/Login");
         }
     }
 }

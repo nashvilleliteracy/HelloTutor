@@ -2,23 +2,22 @@
 ViewBag.Title = "Tutors";
 }
 <h1>@ViewBag.Title</h1>
-@(Html.Kendo().Grid<HelloTutor.Tutor>()
+@(Html.Kendo().Grid<HelloTutor.Models.TutorViewModel>()
           .Name("gridTutors")
           .Columns(columns =>
           {
-            columns.Bound(T => T.FirstName);
-            columns.Bound(T => T.LastName);
-            columns.Bound(T => T.Email);
-            columns.Bound(T => T.PhoneNumber);
-            columns.Bound(T => T.Comments);
-            columns.Bound(T => T.Id).Groupable(false).Visible(false);
-            columns.Bound(T => T.GUID).Groupable(false).Visible(false);
-            columns.Command(command => { command.Edit(); command.Destroy(); }).Title("Commands").Width(180);
+              columns.Bound(T => T.LastName);
+              columns.Bound(T => T.FirstName);
+              columns.Bound(T => T.EmailAddress);
+              columns.Bound(T => T.PhoneNumber);
+              columns.Bound(T => T.Comments);
+              columns.Bound(T => T.DateTimeCreated).Title("Signup Date").Format("{0:MM/dd/yyyy}");
+              columns.Bound(T => T.TutorID).Groupable(false).Visible(false);
+              columns.Bound(T => T.TutorGuid).Groupable(false).Visible(false);
+              columns.Command(command => { command.Edit(); command.Destroy(); }).Title("Options").Width(180);
           })
-          .HtmlAttributes(new { style = "height:400px;" })
-          .ToolBar(toolbar => toolbar
-            .Create()
-            .Text("Add Tutor"))
+          .HtmlAttributes(new { style = "height:600px;" })
+          .ToolBar(tools => tools.Excel())
           .Editable(editable => editable.Mode(GridEditMode.InLine))
           .Pageable(pageable => pageable
             .Refresh(true)
@@ -27,10 +26,11 @@ ViewBag.Title = "Tutors";
           .Scrollable()
           .Groupable()
           .Sortable() // Enable sorting
+          //.ClientDetailTemplateId("template")
           .Filterable()
           .DataSource(dataSource => dataSource //Configure the Grid data source.
               .Ajax() //Specify that Ajax binding is used.
-              .Model(model => model.Id(T => T.Id))
+              .Model(model => model.Id(T => T.TutorID))
               .Create(update => update.Action("EditingInline_Create", "Tutors"))
               .Read(read => read.Action("Tutors_Read", "Tutors")) //Set the action method which will return the data in JSON format.
               .Update(update => update.Action("EditingInline_Update", "Tutors"))
@@ -39,6 +39,85 @@ ViewBag.Title = "Tutors";
               .Events(events => events.Error("error_handler"))
            )
 )
+
+
+
+@*<script id="template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+            .Name("tabStrip_#=TutorID#")
+            .SelectedIndex(0)
+            .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+            .Items(items =>
+            {
+                items.Add().Text("Scan History").Content(@<text>
+        @(Html.Kendo().Grid<EAS.Models.AssetViewHistoryWebServiceViewModel>()
+                        .Name("grid_#=AssetID#")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(o => o.PersonName).Width(190);
+                            columns.Bound(o => o.DateTime).Format("{0:MM/dd/yy hh:mm:ss tt}").Width(190);
+                            columns.Bound(o => o.Latitidue).Width(110);
+                            columns.Bound(o => o.Longitude);
+                        })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(5)
+                            .Read(read => read.Action("_ScanHistory", "Asset", new { ID = "#=AssetID#" }))
+                        )
+                        .Pageable()
+                        .Sortable()
+                        .Scrollable()
+                        .ToClientTemplate())
+                </text>
+                );
+            items.Add().Text("Inspections").LoadContentFrom("/DataForms/_InspectionData/#= AssetID #");
+            items.Add().Text("QR Code").Content(
+                "<div id='qrCode#= AssetID #'></div><script>generateQr('#= AssetID #','#= GUID #');</script>"
+            );
+            items.Add().Text("Photos").LoadContentFrom("/AssetPhotos/_AssetPhotos/#= AssetID #"
+            );
+            items.Add().Text("Comments").Content(@<text>
+        @(Html.Kendo().Grid<EAS.Models.AssetCommentsViewModel>()
+                        .Name("gridComments_#=AssetID#")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(o => o.Comment);
+                            columns.Bound(o => o.UserName).Width(150);
+                            columns.Bound(o => o.DateTime).Format("{0:MM/dd/yy hh:mm:ss tt}").Width(190);
+                        })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(5)
+                            .Read(read => read.Action("_AssetComments", "Comments", new { ID = "#=GUID#" }))
+                        )
+                        .Pageable()
+                        .Sortable()
+                        .Scrollable()
+                        .ToClientTemplate())
+            </text>
+                );
+            })
+            .ToClientTemplate())
+</script>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {

@@ -52,6 +52,7 @@ namespace HelloTutor.Controllers
 
         //
         // GET: /Manage/Index
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
@@ -77,6 +78,7 @@ namespace HelloTutor.Controllers
 
         //
         // POST: /Manage/RemoveLogin
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveLogin(string loginProvider, string providerKey)
@@ -101,6 +103,7 @@ namespace HelloTutor.Controllers
 
         //
         // GET: /Manage/AddPhoneNumber
+        [Authorize(Roles = "Admin")]
         public ActionResult AddPhoneNumber()
         {
             return View();
@@ -108,6 +111,7 @@ namespace HelloTutor.Controllers
 
         //
         // POST: /Manage/AddPhoneNumber
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
@@ -215,6 +219,7 @@ namespace HelloTutor.Controllers
 
         //
         // GET: /Manage/ChangePassword
+        [Authorize(Roles = "Admin")]
         public ActionResult ChangePassword()
         {
             return View();
@@ -246,6 +251,7 @@ namespace HelloTutor.Controllers
 
         //
         // GET: /Manage/SetPassword
+        [Authorize(Roles = "Admin")]
         public ActionResult SetPassword()
         {
             return View();
@@ -253,6 +259,7 @@ namespace HelloTutor.Controllers
 
         //
         // POST: /Manage/SetPassword
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SetPassword(SetPasswordViewModel model)
@@ -278,6 +285,7 @@ namespace HelloTutor.Controllers
 
         //
         // GET: /Manage/ManageLogins
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
             ViewBag.StatusMessage =

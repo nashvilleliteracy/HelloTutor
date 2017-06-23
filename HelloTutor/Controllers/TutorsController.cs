@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using HelloTutor.Models;
 
 namespace HelloTutor.Controllers
 {
@@ -15,20 +16,32 @@ namespace HelloTutor.Controllers
     {
 
         // GET: Tutors
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Tutors_Read([DataSourceRequest]DataSourceRequest request)
         {
-            var HelloTutor = new HelloTutorEntities();
-            IQueryable<Tutor> tutors = HelloTutor.Tutors;
+            var db = new HelloTutorEntities();
+            List<TutorViewModel> tutors = (from t in db.Tutors select new TutorViewModel {
+                    TutorID = t.Id,
+                    TutorGuid = t.GUID,
+                    Comments = t.Comments,
+                    EmailAddress = t.Email,
+                    FirstName = t.FirstName,
+                    LastName = t.LastName,
+                    PhoneNumber = t.PhoneNumber,
+                    DateTimeCreated = t.DateTimeCreated                        
+            }).ToList();
             DataSourceResult result = tutors.ToDataSourceResult(request);
             return Json(result);
 
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditingInline_Create([DataSourceRequest] DataSourceRequest request, Tutor tutor)
         {
@@ -57,46 +70,64 @@ namespace HelloTutor.Controllers
             return Json(new[] { tutor }.ToDataSourceResult(request, ModelState));
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingInline_Update([DataSourceRequest] DataSourceRequest request, Tutor tutor)
+        public ActionResult EditingInline_Update([DataSourceRequest] DataSourceRequest request, TutorViewModel tutor)
         {
             if (tutor != null && ModelState.IsValid)
             {
                 //productService.Update(product);
-                using (var HelloTutor = new HelloTutorEntities())
+                using (var db = new HelloTutorEntities())
                 {
-                    HelloTutor.Tutors.Attach(tutor);
-                    HelloTutor.Entry(tutor).State = EntityState.Modified;
-                    HelloTutor.SaveChanges();
+                    Tutor thisTutor = (from t in db.Tutors where t.Id == tutor.TutorID select t).FirstOrDefault();
+                    if(thisTutor != null)
+                    {
+                        thisTutor.GUID = tutor.TutorGuid;
+                        thisTutor.Id = tutor.TutorID;
+                        thisTutor.Email = tutor.EmailAddress;
+                        thisTutor.LastName = tutor.LastName;
+                        thisTutor.FirstName = tutor.FirstName;
+                        thisTutor.Comments = tutor.Comments;
+                        thisTutor.PhoneNumber = tutor.PhoneNumber;
+
+                        db.SaveChanges();
+                    }
                 }
             }
 
             return Json(new[] { tutor }.ToDataSourceResult(request, ModelState));
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingInline_Destroy([DataSourceRequest] DataSourceRequest request, Tutor tutor)
+        public ActionResult EditingInline_Destroy([DataSourceRequest] DataSourceRequest request, TutorViewModel tutor)
         {
             if (tutor != null)
             {
-                using (var HelloTutor = new HelloTutorEntities())
+                using (var db = new HelloTutorEntities())
                 {
 
                     //Remove all associated classes
-                    foreach (var tc in tutor.TutorsClasses)
+                    var classes = (from c in db.TutorsClasses where c.TutorId == tutor.TutorID select c).ToList();
+                    
+                    foreach (var item in classes)
                     {
-                        HelloTutor.TutorsClasses.Remove(tc);
+                        db.TutorsClasses.Remove(item);
                     }
 
                     //Remove all associated roles
-                    foreach (var tr in tutor.TutorsRoles)
+                    var roles = (from c in db.TutorsRoles where c.TutorId == tutor.TutorID select c).ToList();
+
+                    foreach (var tr in roles)
                     {
-                        HelloTutor.TutorsRoles.Remove(tr);
+                        db.TutorsRoles.Remove(tr);
                     }
+
                     //Remove Tutor
-                    HelloTutor.Tutors.Attach(tutor);
-                    HelloTutor.Tutors.Remove(tutor);
-                    HelloTutor.SaveChanges();
+                    Tutor thisTutor = new Tutor() { Id = tutor.TutorID };
+                    db.Tutors.Attach(thisTutor);
+                    db.Tutors.Remove(thisTutor);
+                    db.SaveChanges();
                 }
             }
 

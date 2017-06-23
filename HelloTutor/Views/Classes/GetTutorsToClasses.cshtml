@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "Class Listing";
+}
+<h1>@ViewBag.Title</h1>
+@(Html.Kendo().Grid<HelloTutor.Models.TutorsClassesViewModel>()
+          .Name("gridTutors")
+          .Columns(columns =>
+          {
+              columns.Bound(T => T.ClassName);
+              columns.Bound(T => T.StartDate).Title("Start Date").Format("{0:MM/dd/yyyy}");
+              columns.Bound(T => T.EndDate).Title("End Date").Format("{0:MM/dd/yyyy}");
+              columns.Bound(T => T.NumberOfTutors);
+              columns.Command(command => { command.Edit().Text("View"); command.Destroy(); }).Title("Options").Width(180);
+          })
+          .HtmlAttributes(new { style = "height:600px;" })
+          .ToolBar(tools => tools.Excel())
+          .Editable(editable => editable.Mode(GridEditMode.InLine))
+          .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5)) // Enable paging
+          .Scrollable()
+          .Groupable()
+          .Sortable() // Enable sorting
+                      //.ClientDetailTemplateId("template")
+          .Filterable()
+          .DataSource(dataSource => dataSource //Configure the Grid data source.
+              .Ajax() //Specify that Ajax binding is used.
+              .Model(model => model.Id(T => T.ClassID))
+              .Create(update => update.Action("EditingInline_Create", "Tutors"))
+              .Read(read => read.Action("tutors_Classes_Read", "Classes")) //Set the action method which will return the data in JSON format.
+              .Update(update => update.Action("EditingInline_Update", "Tutors"))
+              .Destroy(update => update.Action("EditingInline_Destroy", "Tutors"))
+              .PageSize(20)
+              .Events(events => events.Error("error_handler"))
+           )
+)
+
+
+
+@*<script id="template" type="text/kendo-tmpl">
+        @(Html.Kendo().TabStrip()
+                .Name("tabStrip_#=TutorID#")
+                .SelectedIndex(0)
+                .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                .Items(items =>
+                {
+                    items.Add().Text("Scan History").Content(@<text>
+            @(Html.Kendo().Grid<EAS.Models.AssetViewHistoryWebServiceViewModel>()
+                            .Name("grid_#=AssetID#")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(o => o.PersonName).Width(190);
+                                columns.Bound(o => o.DateTime).Format("{0:MM/dd/yy hh:mm:ss tt}").Width(190);
+                                columns.Bound(o => o.Latitidue).Width(110);
+                                columns.Bound(o => o.Longitude);
+                            })
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(5)
+                                .Read(read => read.Action("_ScanHistory", "Asset", new { ID = "#=AssetID#" }))
+                            )
+                            .Pageable()
+                            .Sortable()
+                            .Scrollable()
+                            .ToClientTemplate())
+                    </text>
+                    );
+                items.Add().Text("Inspections").LoadContentFrom("/DataForms/_InspectionData/#= AssetID #");
+                items.Add().Text("QR Code").Content(
+                    "<div id='qrCode#= AssetID #'></div><script>generateQr('#= AssetID #','#= GUID #');</script>"
+                );
+                items.Add().Text("Photos").LoadContentFrom("/AssetPhotos/_AssetPhotos/#= AssetID #"
+                );
+                items.Add().Text("Comments").Content(@<text>
+            @(Html.Kendo().Grid<EAS.Models.AssetCommentsViewModel>()
+                            .Name("gridComments_#=AssetID#")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(o => o.Comment);
+                                columns.Bound(o => o.UserName).Width(150);
+                                columns.Bound(o => o.DateTime).Format("{0:MM/dd/yy hh:mm:ss tt}").Width(190);
+                            })
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(5)
+                                .Read(read => read.Action("_AssetComments", "Comments", new { ID = "#=GUID#" }))
+                            )
+                            .Pageable()
+                            .Sortable()
+                            .Scrollable()
+                            .ToClientTemplate())
+                </text>
+                    );
+                })
+                .ToClientTemplate())
+    </script>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "There are some errors:\n";
+            // Create a message containing all errors.
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            // Display the message.
+            alert(message);
+            // Cancel the changes.
+            var grid = $("#gridClasses").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+</script>

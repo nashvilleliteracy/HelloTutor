@@ -33,6 +33,7 @@ namespace HelloTutor.Controllers
             tutor.LastName = newtutor.LastName;
             tutor.PhoneNumber = newtutor.PhoneNumber;
             tutor.GUID = Guid.NewGuid();
+            tutor.DateTimeCreated = DateTime.Now;
             db.Tutors.Add(tutor);
 
             try

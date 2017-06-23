@@ -8,13 +8,13 @@
         <EntityTypeShape EntityType="HelloTutorModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
         <EntityTypeShape EntityType="HelloTutorModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" />
         <EntityTypeShape EntityType="HelloTutorModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
-        <EntityTypeShape EntityType="HelloTutorModel.AspNetUser" Width="1.5" PointX="3" PointY="2" />
+        <EntityTypeShape EntityType="HelloTutorModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
         <EntityTypeShape EntityType="HelloTutorModel.Class" Width="1.5" PointX="3" PointY="8.5" />
         <EntityTypeShape EntityType="HelloTutorModel.Role" Width="1.5" PointX="0.75" PointY="8.875" />
-        <EntityTypeShape EntityType="HelloTutorModel.Tutor" Width="1.5" PointX="3" PointY="12.625" />
+        <EntityTypeShape EntityType="HelloTutorModel.Tutor" Width="1.5" PointX="3" PointY="12.5" />
         <EntityTypeShape EntityType="HelloTutorModel.TutorsClass" Width="1.5" PointX="5.25" PointY="9" />
         <EntityTypeShape EntityType="HelloTutorModel.TutorsRole" Width="1.5" PointX="6" PointY="12" />
-        <AssociationConnector Association="HelloTutorModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_User_Id" />
+        <AssociationConnector Association="HelloTutorModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="HelloTutorModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="HelloTutorModel.FK_Classes_TutorRoles" />
         <AssociationConnector Association="HelloTutorModel.FK_TutorsClasses_Classes" />

@@ -13,6 +13,7 @@ namespace HelloTutor.Controllers
     public class ClassesController : Controller
     {
         // GET: Roles
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var rvm = new RoleViewModel();
@@ -29,6 +30,29 @@ namespace HelloTutor.Controllers
 
             return Json(classdata, JsonRequestBehavior.AllowGet);
         }
+
+
+        // get Tutors to Classes
+        [Authorize(Roles = "Admin")]
+        public ActionResult GetTutorsToClasses()
+        {
+            var rvm = new RoleViewModel();
+            ViewData["roles"] = rvm.GetRolesForListBox();
+
+            return View();
+        }
+
+        public ActionResult tutors_Classes_Read([DataSourceRequest]DataSourceRequest request)
+        {
+            TutorsClassesViewModel tcv = new TutorsClassesViewModel();
+
+            DataSourceResult result = tcv.GetTutorsClasses().ToDataSourceResult(request);
+
+            return Json(result);
+        }
+
+
+
 
         public ActionResult Classes_Read([DataSourceRequest]DataSourceRequest request)
         {
@@ -51,6 +75,7 @@ namespace HelloTutor.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditingInline_Create([DataSourceRequest] DataSourceRequest request, ClassesViewModel cvm)
         {
@@ -93,6 +118,7 @@ namespace HelloTutor.Controllers
             return Json(new[] { cvm }.ToDataSourceResult(request, ModelState));
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditingInline_Update([DataSourceRequest] DataSourceRequest request, ClassesViewModel cvm)
         {
@@ -121,6 +147,7 @@ namespace HelloTutor.Controllers
             return Json(new[] { cvm }.ToDataSourceResult(request, ModelState));
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditingInline_Destroy([DataSourceRequest] DataSourceRequest request, ClassesViewModel cvm)
         {

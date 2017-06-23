@@ -19,6 +19,10 @@ namespace HelloTutor
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
+            EmailNotificationModel emn = new EmailNotificationModel();
+            emn.SendEmail(message.Destination, message.Subject, message.Body);
+            
+
             return Task.FromResult(0);
         }
     }

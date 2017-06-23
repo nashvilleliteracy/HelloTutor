@@ -43,6 +43,12 @@
                         <br /><br />
                         <br /><br />
                         <br /><br />
+                        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                        {
+                            <center>
+                                <a href="/Tutors/Index">Return to Tutors List</a>
+                            </center>
+                        }
                         <br /><br />
                         <br /><br />
                         <br /><br />

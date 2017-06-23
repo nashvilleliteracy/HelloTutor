@@ -13,11 +13,13 @@ namespace HelloTutor.Controllers
     public class RolesController : Controller
     {
         // GET: Roles
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             return View();
         }
 
+        
         [HttpPost]
         public ActionResult Roles_Read([DataSourceRequest]DataSourceRequest request)
         {
@@ -34,11 +36,12 @@ namespace HelloTutor.Controllers
             return Json(result);
         }
 
-        public ActionResult _RolesDropDown ()
+        public ActionResult _RolesDropDown()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditingInline_Create([DataSourceRequest] DataSourceRequest request, RoleViewModel rvm)
         {
@@ -72,6 +75,7 @@ namespace HelloTutor.Controllers
             return Json(new[] { rvm }.ToDataSourceResult(request, ModelState));
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditingInline_Update([DataSourceRequest] DataSourceRequest request, RoleViewModel rvm)
         {
@@ -97,6 +101,7 @@ namespace HelloTutor.Controllers
             return Json(new[] { rvm }.ToDataSourceResult(request, ModelState));
         }
 
+        [Authorize(Roles = "Admin")]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditingInline_Destroy([DataSourceRequest] DataSourceRequest request, RoleViewModel rvm)
         {
