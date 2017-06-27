@@ -42,6 +42,24 @@ namespace HelloTutor.Controllers
             return View();
         }
 
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ViewClassRegistrations(Int32 ID)
+        {
+            HelloTutorEntities db = new HelloTutorEntities();
+            // get the class name
+            Class thisClass = (from c in db.Classes where c.Id == ID select c).FirstOrDefault();
+
+            String sql = "Select * from Tutors where Id in (select TutorID from TutorsClasses where ClassID = " + ID + ") order by LastName, FirstName";
+
+            List<Tutor> tutorList = db.Database.SqlQuery<Tutor>(sql).ToList();
+
+            ViewData["ClassName"] = thisClass.Name;
+            ViewData["tutors"] = tutorList;
+
+            return View();
+        }
+
         public ActionResult tutors_Classes_Read([DataSourceRequest]DataSourceRequest request)
         {
             TutorsClassesViewModel tcv = new TutorsClassesViewModel();

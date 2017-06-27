@@ -1,0 +1,25 @@
+﻿<table class="table table-striped">
+    <tr>
+        <td><b>Last Name</td>
+        <td><b>First Name</td>
+        <td><b>Email</td>
+        <td><b>Phone</td>
+        <td><b>Comments</td>
+        <td><b>Date Registered</td>
+        <td></td>
+    </tr>
+
+    @foreach (var item in (List<Tutor>)Model)
+    {
+        <tr>
+            <td>@item.LastName</td>
+            <td>@item.FirstName</td>
+            <td>@item.Email</td>
+            <td>@item.PhoneNumber</td>
+            <td>@item.Comments</td>
+            <td>@item.DateTimeCreated</td>
+            <td><a onclick="return deleteTutor('@item.Id');" class="k-button k-button-icontext k-grid-ViewDetails" href="#">
+                <span class=""></span>Remove</a></td>
+        </tr>
+    }
+</table>

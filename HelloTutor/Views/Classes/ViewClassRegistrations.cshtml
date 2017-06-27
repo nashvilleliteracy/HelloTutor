@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Registered Tutors";
+}
+
+<h1>@ViewData["ClassName"].ToString()</h1>
+
+<br />
+<br />
+
+@Html.Partial("_ClassRegistrants", ViewData["tutors"])
+
+<script>
+    function deleteTutor(id) {
+
+        var confirm = (alert('Are you certain you would like to remove this tutor from the class?'));
+        alert(confirm);
+        return;
+
+        var Url="@Url.Content("/Classes/_removeTutorFromClass")";
+        @*$.ajax({
+            url: Url,
+            dataType: 'json',
+            data: { ClassID: @ViewBag.ClassID, TutorID: id },
+            success: function (data) {
+                $("#TrainingSessionID").empty();
+                $("#TrainingSessionID").append("<option value='0'>Please select a Training Session</option>");
+                $.each(data, function (index, optiondata) {
+                    $("#TrainingSessionID").append("<option value='" + optiondata.ClassID + "'>" + optiondata.ClassName + "</option>");
+                });
+            }
+        });*@
+    }
+
+</script>

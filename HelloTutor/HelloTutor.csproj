@@ -329,6 +329,8 @@
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Classes\_RolesId.cshtml" />
     <Content Include="Views\Classes\GetTutorsToClasses.cshtml" />
+    <Content Include="Views\Classes\ViewClassRegistrations.cshtml" />
+    <Content Include="Views\Classes\_ClassRegistrants.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

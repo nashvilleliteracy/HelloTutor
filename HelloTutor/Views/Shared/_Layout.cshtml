@@ -38,6 +38,7 @@
                     @if (HttpContext.Current.User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Tutors", "Index", "Tutors")</li>
+                        <li><a href="/Classes/GetTutorsToClasses">Tutor Registrations</a></li>
                         @Html.Partial("_AdminPartial")
                     }
                 </ul>
