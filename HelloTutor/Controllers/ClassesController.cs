@@ -31,6 +31,20 @@ namespace HelloTutor.Controllers
             return Json(classdata, JsonRequestBehavior.AllowGet);
         }
 
+        public Boolean _removeTutorFromClass(int ClassID, int TutorID)
+        {
+            HelloTutorEntities db = new HelloTutorEntities();
+            TutorsClass tc = (from t in db.TutorsClasses where t.ClassId == ClassID && t.TutorId == TutorID select t).FirstOrDefault();
+
+            if(tc != null)
+            {
+                db.TutorsClasses.Remove(tc);
+                db.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
 
         // get Tutors to Classes
         [Authorize(Roles = "Admin")]
@@ -56,6 +70,7 @@ namespace HelloTutor.Controllers
 
             ViewData["ClassName"] = thisClass.Name;
             ViewData["tutors"] = tutorList;
+            ViewBag.ClassID = thisClass.Id;
 
             return View();
         }

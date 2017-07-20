@@ -13,23 +13,27 @@
 <script>
     function deleteTutor(id) {
 
-        var confirm = (alert('Are you certain you would like to remove this tutor from the class?'));
-        alert(confirm);
-        return;
-
-        var Url="@Url.Content("/Classes/_removeTutorFromClass")";
-        @*$.ajax({
-            url: Url,
-            dataType: 'json',
-            data: { ClassID: @ViewBag.ClassID, TutorID: id },
-            success: function (data) {
-                $("#TrainingSessionID").empty();
-                $("#TrainingSessionID").append("<option value='0'>Please select a Training Session</option>");
-                $.each(data, function (index, optiondata) {
-                    $("#TrainingSessionID").append("<option value='" + optiondata.ClassID + "'>" + optiondata.ClassName + "</option>");
-                });
-            }
-        });*@
+        var answer = confirm('Are you certain you would like to remove this tutor from the class?');
+        //alert(id);
+        if (answer == true) {
+            //alert(0);
+            var Url = "@Url.Content("/Classes/_removeTutorFromClass")";
+            $.ajax({
+                url: Url,
+                dataType: 'json',
+                data: { ClassID: @ViewBag.ClassID, TutorID: id },
+                success: function (data) {
+                    alert(data);
+                    //$("#TrainingSessionID").empty();
+                    //$("#TrainingSessionID").append("<option value='0'>Please select a Training Session</option>");
+                    //$.each(data, function (index, optiondata) {
+                    //    $("#TrainingSessionID").append("<option value='" + optiondata.ClassID + "'>" + optiondata.ClassName + "</option>");
+                    //});
+                }
+            });
+            // todo: consider not reloading the page
+            document.location.reload();
+        }
     }
 
 </script>
