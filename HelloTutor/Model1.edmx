@@ -68,6 +68,7 @@
           <Property Name="EndDate" Type="datetime" Nullable="false" />
           <Property Name="Role" Type="int" Nullable="false" />
           <Property Name="MaxEnrollment" Type="int" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -383,6 +384,7 @@
           <Property Name="MaxEnrollment" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Role1" Relationship="HelloTutorModel.FK_Classes_TutorRoles" FromRole="Class" ToRole="Role" />
           <NavigationProperty Name="TutorsClasses" Relationship="HelloTutorModel.FK_TutorsClasses_Classes" FromRole="Class" ToRole="TutorsClass" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -578,6 +580,7 @@
           <EntitySetMapping Name="Classes">
             <EntityTypeMapping TypeName="HelloTutorModel.Class">
               <MappingFragment StoreEntitySet="Classes">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="MaxEnrollment" ColumnName="MaxEnrollment" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />

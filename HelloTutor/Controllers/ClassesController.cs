@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using BootstrapTable;
 
 namespace HelloTutor.Controllers
 {
@@ -85,12 +86,40 @@ namespace HelloTutor.Controllers
         }
 
 
+        private List<ClassesViewModel> getClasses()
+        {
+            var db = new HelloTutorEntities();
+            List<ClassesViewModel> classes = (from c in db.Classes where c.IsDeleted == false select new ClassesViewModel
+            {
+                ClassName = c.Name,
+                ClassDescription = c.Description,
+                MaxEnrollment = c.MaxEnrollment,
+                StartDate = c.StartDate,
+                EndDate = c.EndDate,
+                ClassGuid = c.GUID,
+                RoleID = c.Role,
+                ClassID = c.Id
+            }).ToList();
+
+            return classes;
+        }
+
+        public JsonResult _getClassesPaged(int offset, int limit, string search, string sort, string order)
+        {
+            var classes = getClasses();
+            var model = new
+            {
+                total = classes.Count(),
+                rows = classes.Skip((offset / limit) * limit).Take(limit),
+            };
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
 
         public ActionResult Classes_Read([DataSourceRequest]DataSourceRequest request)
         {
-            var HiTutor = new HelloTutorEntities();
-            IQueryable<HelloTutor.Class> classes = HiTutor.Classes;
+            var db = new HelloTutorEntities();
+            IQueryable<HelloTutor.Class> classes = (from c in db.Classes where c.IsDeleted == false select c);
             DataSourceResult result = classes.ToDataSourceResult(request, class_ => new ClassesViewModel
             {
                 ClassName = class_.Name,
@@ -186,30 +215,10 @@ namespace HelloTutor.Controllers
         {
             if (cvm != null)
             {
-                using (var HelloTutor = new HelloTutorEntities())
+                using (var db = new HelloTutorEntities())
                 {
-
-                    var class_ = new Class()
-                    {
-                        Name = cvm.ClassName,
-                        Description = cvm.ClassDescription,
-                        Role = cvm.RoleID,
-                        MaxEnrollment = cvm.MaxEnrollment,
-                        StartDate = cvm.StartDate,
-                        EndDate = cvm.EndDate,
-                        GUID = cvm.ClassGuid,
-                        Id = cvm.ClassID
-                    };
-
-                    //Remove all associated roles
-                    foreach (var tc in class_.TutorsClasses)
-                    {
-                        HelloTutor.TutorsClasses.Remove(tc);
-                    }
-                    //Remove Tutor
-                    HelloTutor.Classes.Attach(class_);
-                    HelloTutor.Classes.Remove(class_);
-                    HelloTutor.SaveChanges();
+                    String sql = "update Classes set IsDeleted = 1 where Id = " + cvm.ClassID;
+                    db.Database.ExecuteSqlCommand(sql);
                 }
             }
 

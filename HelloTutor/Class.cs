@@ -28,6 +28,7 @@ namespace HelloTutor
         public System.DateTime EndDate { get; set; }
         public int Role { get; set; }
         public int MaxEnrollment { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual Role Role1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

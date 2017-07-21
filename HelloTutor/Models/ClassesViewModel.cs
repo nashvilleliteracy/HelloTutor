@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using Kendo.Mvc.UI;
 namespace HelloTutor.Models
 {
     public class ClassesViewModel
     {
+        [System.ComponentModel.DataAnnotations.ScaffoldColumn(false)]
         public Int32 ClassID { get; set; }
         public String ClassName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public Int32 RoleID { get; set; }
         public Int32 MaxEnrollment { get; set; }
+        [System.ComponentModel.DataAnnotations.ScaffoldColumn(false)]
         public Guid ClassGuid { get; set; }
         public String ClassDescription { get; set; }
 

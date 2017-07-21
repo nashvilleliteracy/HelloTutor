@@ -49,6 +49,7 @@
     <EntitySetMapping Name="Classes">
       <EntityTypeMapping TypeName="HelloTutorModel.Class">
         <MappingFragment StoreEntitySet="Classes">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
           <ScalarProperty Name="MaxEnrollment" ColumnName="MaxEnrollment" />
           <ScalarProperty Name="Role" ColumnName="Role" />
           <ScalarProperty Name="EndDate" ColumnName="EndDate" />

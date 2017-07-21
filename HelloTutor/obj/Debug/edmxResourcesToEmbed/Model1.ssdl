@@ -63,6 +63,7 @@
     <Property Name="EndDate" Type="datetime" Nullable="false" />
     <Property Name="Role" Type="int" Nullable="false" />
     <Property Name="MaxEnrollment" Type="int" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Roles">
     <Key>

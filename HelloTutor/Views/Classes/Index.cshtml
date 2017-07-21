@@ -1,22 +1,124 @@
-﻿@{
+﻿
+
+@{
 ViewBag.Title = "Classes";
 }
 <h1>@ViewBag.Title</h1>
-@(Html.Kendo().Grid<HelloTutor.Models.ClassesViewModel>()
+
+<link href="/Content/bootstrap-table.min.css" rel="stylesheet" />
+<script src="/Scripts/bootstrap-table/bootstrap-table.min.js"></script>
+
+
+
+
+@(Html.BootstrapTable<HelloTutor.Models.ClassesViewModel>(Url.Action("_getClassesPaged"), TablePaginationOption.server)
+    .Apply(TableOption.striped)
+    .Apply(m => m.ClassID, ColumnOption.align_center))
+
+
+
+
+
+
+<script>
+    function menuFormatter(value, row, index) {
+        return [
+            '@Ajax.ActionLink("Ajax", "MenuAction", "Home", new { id = "{0}", }, new AjaxOptions { }, new { @class = "btn btn-success btn-small" })',
+            '@Html.ActionLink("Html", "MenuAction", "Home", new { id = "{0}", }, new { @class = "btn btn-primary btn-small" })'
+        ].join(' ').replace(/%7B0%7D/g, row["Id"]);
+    }
+</script>
+
+
+
+
+
+
+
+
+    @*<table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Lastname</th>
+                <th>Time</th>
+                <th>Role</th>
+                <th>Max Enrollment</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Description</td>
+                <td>Doe</td>
+                <td>john@example.com</td>
+                <td>Doe</td>
+                <td>Doe</td>
+                <td>Doe</td>
+            </tr>
+            <tr>
+                <td>Mary</td>
+                <td>Moe</td>
+                <td>mary@example.com</td>
+                <td>Doe</td>
+                <td>Doe</td>
+                <td>Doe</td>
+            </tr>
+            <tr>
+                <td>July</td>
+                <td>Dooley</td>
+                <td>july@example.com</td>
+                <td>Doe</td>
+                <td>Doe</td>
+                <td>Doe</td>
+            </tr>
+        </tbody>
+    </table>*@
+
+
+
+
+
+
+    @*@(Html.Kendo().Grid<HelloTutor.Models.ClassesViewModel>()
           .Name("gridClasses")
           .Columns(columns =>
           {
-              columns.Command(command => { command.Edit(); command.Destroy(); }).Title("Commands").Width(180);
-              columns.Bound(Class => Class.ClassName);
-              columns.Bound(Class => Class.ClassDescription);
+              //columns.Bound(Class => Class.ClassName);
+              //columns.Bound(Class => Class.ClassDescription);
+
+              columns.Template(e => { }).ClientTemplate(" ").Width(300).Title("Class Details");
+
               columns.ForeignKey(Class => Class.RoleID, (System.Collections.IEnumerable)ViewData["Roles"], "Value", "Text").Title("Role");
               columns.Bound(Class => Class.StartDate).ClientTemplate("#= kendo.toString(StartDate, \"MM/dd/yyyy hh:mm tt\") #"); ;
-              columns.Bound(Class => Class.EndDate).ClientTemplate("#= kendo.toString(StartDate, \"MM/dd/yyyy hh:mm tt\") #"); ;
-              columns.Bound(Class => Class.MaxEnrollment);
+              columns.Bound(Class => Class.EndDate).ClientTemplate("#= kendo.toString(EndDate, \"MM/dd/yyyy hh:mm tt\") #"); ;
+              columns.Bound(Class => Class.MaxEnrollment).Width(25);
               columns.Bound(Class => Class.ClassID).Groupable(false).Visible(false);
               columns.Bound(Class => Class.ClassGuid).Groupable(false).Visible(false);
+              columns.Command(command => { command.Edit(); command.Destroy(); }).Title("Options").Width(180);
           })
-           .HtmlAttributes(new { style = "height:400px;" })
+          .ClientRowTemplate(
+        "<tr data-uid='#: ClassID #'>" +
+            "<td>" +
+               "#: data.ClassName #" +
+               "</td><td><b>Description:</b>" +
+               "#: data.ClassDescription #" +
+            "</td>" +
+         "</tr>"
+    )
+    .ClientAltRowTemplate(
+        "<tr class='k-alt' data-uid='#: ClassID #'>" +
+             "<td>" +
+               "#: data.ClassName #" +
+               "</td><td><b>Description:</b>" +
+               "#: data.ClassDescription #" +
+            "</td>" +
+         "</tr>"
+    )
+
+
+
+          //.HtmlAttributes(new { style = "height:780px;" })
           .ToolBar(toolbar => toolbar
             .Create()
             .Text("Add Class"))
@@ -25,7 +127,7 @@ ViewBag.Title = "Classes";
             .Refresh(true)
             .PageSizes(true)
             .ButtonCount(5)) // Enable paging
-          .Scrollable()
+                             //.Scrollable()
           .Groupable()
           .Sortable() // Enable sorting
           .Filterable()
@@ -39,24 +141,24 @@ ViewBag.Title = "Classes";
               .PageSize(20)
               .Events(events => events.Error("error_handler"))
            )
-)
-<script type="text/javascript">
-    function error_handler(e) {
-        if (e.errors) {
-            var message = "There are some errors:\n";
-            // Create a message containing all errors.
-            $.each(e.errors, function (key, value) {
-                if ('errors' in value) {
-                    $.each(value.errors, function () {
-                        message += this + "\n";
-                    });
-                }
-            });
-            // Display the message.
-            alert(message);
-            // Cancel the changes.
-            var grid = $("#gridClasses").data("kendoGrid");
-            grid.cancelChanges();
+    )
+    <script type="text/javascript">
+        function error_handler(e) {
+            if (e.errors) {
+                var message = "There are some errors:\n";
+                // Create a message containing all errors.
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                // Display the message.
+                alert(message);
+                // Cancel the changes.
+                var grid = $("#gridClasses").data("kendoGrid");
+                grid.cancelChanges();
+            }
         }
-    }
-</script>
+    </script>*@
